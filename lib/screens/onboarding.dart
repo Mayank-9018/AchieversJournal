@@ -1,5 +1,6 @@
-import 'package:achievers_journal/pages/onboarding_page1.dart';
 import 'package:flutter/material.dart';
+import '/pages/onboarding_page1.dart';
+import '/pages/onboarding_page3.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class OnboardingScreen extends StatelessWidget {
       body: PageView(
         children: const [
           OnboardingPage1(),
+          OnboardingPage3(),
         ],
       ),
       bottomNavigationBar: Container(
