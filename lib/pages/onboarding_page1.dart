@@ -8,7 +8,7 @@ class OnboardingPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50.0, horizontal: 40.0),
+      padding: const EdgeInsets.symmetric(vertical: 80.0, horizontal: 40.0),
       child: Column(
         children: [
           Text(
@@ -26,7 +26,7 @@ class OnboardingPage1 extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          const ProgressBar(Icons.translate, 'Practive German', 15),
+          const ProgressBar(Icons.translate, 'Practice German', 15),
           const SizedBox(
             height: 100,
           ),

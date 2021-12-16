@@ -12,6 +12,38 @@ class OnboardingScreen extends StatelessWidget {
           OnboardingPage1(),
         ],
       ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.symmetric(vertical: 15.0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0, -2),
+                blurRadius: 10.0,
+                spreadRadius: 1),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text('Signup'),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 33),
+                child: Text('Login'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
