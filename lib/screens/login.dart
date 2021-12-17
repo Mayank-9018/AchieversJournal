@@ -33,6 +33,13 @@ class LoginScreen extends StatelessWidget {
                 hintText: 'Password',
               ),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () {},
+                child: const Text('Forgot password'),
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),

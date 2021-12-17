@@ -17,6 +17,25 @@ ThemeData lightTheme = ThemeData(
       onError: Colors.green,
       brightness: Brightness.light),
   appBarTheme: const AppBarTheme(elevation: 0.0),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      textStyle: MaterialStateProperty.all(
+        const TextStyle(fontSize: 16.0),
+      ),
+      overlayColor: MaterialStateProperty.resolveWith(
+        (states) {
+          if (states.contains(MaterialState.pressed)) {
+            return Colors.grey.shade300;
+          } else {
+            return Colors.transparent;
+          }
+        },
+      ),
+      backgroundColor:
+          MaterialStateProperty.all<Color>(Colors.white),
+      foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+    ),
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       textStyle: MaterialStateProperty.all(
