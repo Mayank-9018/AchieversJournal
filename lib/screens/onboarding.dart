@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '/pages/onboarding_page1.dart';
 import '/pages/onboarding_page3.dart';
 import '/screens/signup.dart';
+import '/screens/login.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -41,7 +42,10 @@ class OnboardingScreen extends StatelessWidget {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (con) => const LoginScreen()));
+              },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 33),
                 child: Text('Login'),
