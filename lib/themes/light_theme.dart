@@ -50,7 +50,7 @@ ThemeData lightTheme = ThemeData(
       ),
     ),
   ),
-  textButtonTheme: TextButtonThemeData(
+  outlinedButtonTheme: OutlinedButtonThemeData(
     style: ButtonStyle(
       textStyle: MaterialStateProperty.all(
         const TextStyle(fontSize: 16.0),
@@ -67,9 +67,11 @@ ThemeData lightTheme = ThemeData(
       }),
       shape: MaterialStateProperty.all<OutlinedBorder>(
         RoundedRectangleBorder(
-          side: BorderSide(width: 0.5, color: Colors.grey.shade900),
           borderRadius: BorderRadius.circular(30.0),
         ),
+      ),
+      side: MaterialStateProperty.all<BorderSide>(
+        BorderSide(width: 0.5, color: Colors.grey.shade900),
       ),
       backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
       foregroundColor: MaterialStateProperty.all<Color>(Colors.blue.shade900),

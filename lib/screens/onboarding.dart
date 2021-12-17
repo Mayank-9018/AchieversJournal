@@ -31,7 +31,7 @@ class OnboardingScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            TextButton(
+            OutlinedButton(
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (con) => const SignupScreen()));

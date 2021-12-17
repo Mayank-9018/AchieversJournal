@@ -43,7 +43,7 @@ class SignupScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            TextButton(
+            OutlinedButton(
               onPressed: () {},
               child: const Padding(
                 padding: EdgeInsets.symmetric(
