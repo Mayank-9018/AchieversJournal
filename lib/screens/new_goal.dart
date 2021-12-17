@@ -1,14 +1,11 @@
 import 'package:achievers_journal/pages/newgoal_page1.dart';
+import 'package:achievers_journal/pages/newgoal_page2.dart';
 import 'package:flutter/material.dart';
 
-class NewGoalScreen extends StatefulWidget {
-  const NewGoalScreen({Key? key}) : super(key: key);
+class NewGoalScreen extends StatelessWidget {
+  final PageController _pageController = PageController();
+  NewGoalScreen({Key? key}) : super(key: key);
 
-  @override
-  State<NewGoalScreen> createState() => _NewGoalScreenState();
-}
-
-class _NewGoalScreenState extends State<NewGoalScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +21,10 @@ class _NewGoalScreenState extends State<NewGoalScreen> {
             ),
             Expanded(
               child: PageView(
+                controller: _pageController,
                 children: const [
                   NewGoalPage1(),
+                  NewGoalPage2(),
                 ],
               ),
             ),
@@ -55,7 +54,11 @@ class _NewGoalScreenState extends State<NewGoalScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text('Continue'),
               ),
-              onPressed: () {},
+              onPressed: () {
+                if (_pageController.page!.round() != 3) {
+                  _pageController.jumpToPage(_pageController.page!.round() + 1);
+                }
+              },
             ),
           ],
         ),

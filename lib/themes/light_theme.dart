@@ -31,8 +31,7 @@ ThemeData lightTheme = ThemeData(
           }
         },
       ),
-      backgroundColor:
-          MaterialStateProperty.all<Color>(Colors.white),
+      backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
       foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
     ),
   ),
@@ -115,5 +114,9 @@ ThemeData lightTheme = ThemeData(
     cursorColor: Colors.black,
     selectionColor: Colors.grey.shade200,
     selectionHandleColor: Colors.black,
+  ),
+  radioTheme: RadioThemeData(
+    fillColor: MaterialStateProperty.all(Colors.blue.shade900),
+    overlayColor: MaterialStateProperty.all(Colors.lightBlue.shade100),
   ),
 );
