@@ -1,5 +1,6 @@
 import 'package:achievers_journal/pages/newgoal_page1.dart';
 import 'package:achievers_journal/pages/newgoal_page2.dart';
+import 'package:achievers_journal/pages/newgoal_page3.dart';
 import 'package:flutter/material.dart';
 
 class NewGoalScreen extends StatelessWidget {
@@ -25,6 +26,7 @@ class NewGoalScreen extends StatelessWidget {
                 children: const [
                   NewGoalPage1(),
                   NewGoalPage2(),
+                  NewGoalPage3()
                 ],
               ),
             ),
