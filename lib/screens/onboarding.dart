@@ -13,6 +13,7 @@ class OnboardingScreen extends StatelessWidget {
       body: PageView(
         children: const [
           OnboardingPage1(),
+          //TODO: OnboardingPage2 with weekly analysis demo
           OnboardingPage3(),
         ],
       ),

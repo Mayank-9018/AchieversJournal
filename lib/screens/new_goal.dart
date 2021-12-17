@@ -27,6 +27,7 @@ class NewGoalScreen extends StatelessWidget {
                   NewGoalPage1(),
                   NewGoalPage2(),
                   NewGoalPage3()
+                  // TODO: NewGoalPage3 containing the new goal summary
                 ],
               ),
             ),
