@@ -78,5 +78,21 @@ ThemeData lightTheme = ThemeData(
       ),
     ),
   ),
-  // floatingActionButtonTheme: 
+  inputDecorationTheme: InputDecorationTheme(
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(),
+      borderRadius: BorderRadius.circular(14.0),
+    ),
+    border: OutlineInputBorder(
+      borderSide: const BorderSide(
+        color: Colors.grey,
+      ),
+      borderRadius: BorderRadius.circular(14.0),
+    ),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.black,
+    selectionColor: Colors.grey.shade200,
+    selectionHandleColor: Colors.black,
+  ),
 );

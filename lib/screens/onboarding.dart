@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '/pages/onboarding_page1.dart';
 import '/pages/onboarding_page3.dart';
+import '/screens/signup.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -30,7 +31,10 @@ class OnboardingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (con) => const SignupScreen()));
+              },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text('Signup'),
