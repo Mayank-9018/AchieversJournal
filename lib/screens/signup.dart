@@ -1,3 +1,4 @@
+import 'package:achievers_journal/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -44,7 +45,14 @@ class SignupScreen extends StatelessWidget {
               height: 20,
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DashboardScreen(),
+                    ),
+                    (route) => false);
+              },
               child: const Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 5.0,
