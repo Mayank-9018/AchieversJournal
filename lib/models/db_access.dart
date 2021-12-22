@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Database {
   late Future<bool> isLoggedIn;
+  late dynamic data;
 
   Database() {
     isLoggedIn = getLoginStatus();
@@ -15,7 +16,15 @@ class Database {
   /// Returns type `bool`
   Future<bool> getLoginStatus() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
-    return _prefs.getBool('isLoggedIn') ?? false;
+    bool status = _prefs.getBool('isLoggedIn') ?? false;
+    // TODO: Fix this
+    if (!status) {
+      data = rdbData();
+    } else {
+      data = localData();
+    }
+    // TODO: and this
+    return !status;
   }
 
   /// Returns a `Stream` of type `DatabaseEvent` from the firebase

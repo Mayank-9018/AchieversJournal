@@ -20,10 +20,10 @@ class DashboardScreen extends StatelessWidget {
               future: Provider.of<Database>(context, listen: false).isLoggedIn,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (!snapshot.data!) {
+                  if (snapshot.data!) {
                     return StreamBuilder<DatabaseEvent>(
-                      stream: Provider.of<Database>(context, listen: false)
-                          .rdbData(),
+                      stream: Provider.of<Database>(context, listen: false).data
+                          as Stream<DatabaseEvent>,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView(
