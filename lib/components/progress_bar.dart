@@ -1,12 +1,21 @@
+import 'package:achievers_journal/models/goal.dart';
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
   final IconData icon;
   final String goal;
   final int progress;
-
-  const ProgressBar(this.icon, this.goal, this.progress, {Key? key})
+  final int maxGoal;
+  const ProgressBar(this.icon, this.goal, this.progress, this.maxGoal,
+      {Key? key})
       : super(key: key);
+
+  ProgressBar.fromGoal(Goal goal, {Key? key})
+      : icon = IconData(goal.icon!, fontFamily: 'MaterialIcons'),
+        goal = goal.name,
+        progress = goal.history!.first['achieved'],
+        maxGoal = goal.history!.first['goal'],
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +34,11 @@ class ProgressBar extends StatelessWidget {
             padding: const EdgeInsets.only(top: 1.5, left: 1.5),
             child: Container(
               height: 70 - 3.0,
-              width: (constraints.maxWidth * progress / 100) - 3.0,
+              width: (constraints.maxWidth * progress / maxGoal) - 3.0,
               decoration: BoxDecoration(
-                color: progress > 70
+                color: progress / maxGoal > 0.7
                     ? Colors.green
-                    : progress > 30
+                    : progress / maxGoal > 0.3
                         ? Colors.amber
                         : Colors.red,
                 borderRadius: BorderRadius.circular(14.0),

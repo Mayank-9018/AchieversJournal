@@ -23,15 +23,15 @@ class OnboardingPage1 extends StatelessWidget {
                   height: 50,
                 ),
                 const ProgressBar(
-                    Icons.chrome_reader_mode_outlined, 'Read', 60),
+                    Icons.chrome_reader_mode_outlined, 'Read', 60, 100),
                 const SizedBox(
                   height: 10,
                 ),
-                const ProgressBar(Icons.self_improvement, 'Meditate', 100),
+                const ProgressBar(Icons.self_improvement, 'Meditate', 100, 100),
                 const SizedBox(
                   height: 10,
                 ),
-                const ProgressBar(Icons.translate, 'Practice German', 15),
+                const ProgressBar(Icons.translate, 'Practice German', 15, 100),
               ],
             ),
           ),
