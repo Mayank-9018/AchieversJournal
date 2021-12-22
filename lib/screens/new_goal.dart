@@ -1,16 +1,39 @@
 import 'package:achievers_journal/pages/newgoal_page1.dart';
 import 'package:achievers_journal/pages/newgoal_page2.dart';
 import 'package:achievers_journal/pages/newgoal_page3.dart';
+import 'package:achievers_journal/pages/newgoal_page4.dart';
 import 'package:flutter/material.dart';
 
-class NewGoalScreen extends StatelessWidget {
+class NewGoalScreen extends StatefulWidget {
+  const NewGoalScreen({Key? key}) : super(key: key);
+
+  @override
+  State<NewGoalScreen> createState() => _NewGoalScreenState();
+}
+
+class _NewGoalScreenState extends State<NewGoalScreen> {
+  int currentPage = 0;
   final PageController _pageController = PageController();
-  NewGoalScreen({Key? key}) : super(key: key);
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController.addListener(() {
+      setState(() {
+        currentPage = _pageController.page!.round();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
@@ -23,11 +46,11 @@ class NewGoalScreen extends StatelessWidget {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                children: const [
-                  NewGoalPage1(),
-                  NewGoalPage2(),
-                  NewGoalPage3()
-                  // TODO: NewGoalPage3 containing the new goal summary
+                children: [
+                  const NewGoalPage1(),
+                  NewGoalPage2(_pageController),
+                  NewGoalPage3(_pageController),
+                  NewGoalPage4(_pageController)
                 ],
               ),
             ),
@@ -53,13 +76,17 @@ class NewGoalScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ElevatedButton(
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text('Continue'),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(currentPage == 3 ? 'Start' : 'Continue'),
               ),
               onPressed: () {
-                if (_pageController.page!.round() != 3) {
-                  _pageController.jumpToPage(_pageController.page!.round() + 1);
+                if (currentPage != 3) {
+                  _pageController.animateToPage(
+                    _pageController.page!.round() + 1,
+                    duration: const Duration(milliseconds: 250),
+                    curve: Curves.fastOutSlowIn,
+                  );
                 }
               },
             ),

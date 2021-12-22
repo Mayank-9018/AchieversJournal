@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 enum Frequency { daily, weekly }
 
 class NewGoalPage2 extends StatefulWidget {
-  const NewGoalPage2({Key? key}) : super(key: key);
+  final PageController _pageController;
+  const NewGoalPage2(this._pageController, {Key? key}) : super(key: key);
 
   @override
   State<NewGoalPage2> createState() => _NewGoalPage2State();
@@ -14,51 +15,61 @@ class _NewGoalPage2State extends State<NewGoalPage2> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 50),
-      children: [
-        Text(
-          "How often?",
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        const SizedBox(
-          height: 50,
-        ),
-        ListTile(
-          title: const Text('Everyday'),
-          leading: Radio<Frequency>(
-            value: Frequency.daily,
-            groupValue: _frequency,
-            onChanged: (value) {
+    return WillPopScope(
+      onWillPop: () async {
+        widget._pageController.animateToPage(
+          0,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.fastOutSlowIn,
+        );
+        return false;
+      },
+      child: ListView(
+        padding: const EdgeInsets.only(top: 50),
+        children: [
+          Text(
+            "How often?",
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          ListTile(
+            title: const Text('Everyday'),
+            leading: Radio<Frequency>(
+              value: Frequency.daily,
+              groupValue: _frequency,
+              onChanged: (value) {
+                setState(() {
+                  _frequency = value!;
+                });
+              },
+            ),
+            onTap: () {
               setState(() {
-                _frequency = value!;
+                _frequency = Frequency.daily;
               });
             },
           ),
-          onTap: () {
-            setState(() {
-              _frequency = Frequency.daily;
-            });
-          },
-        ),
-        ListTile(
-          title: const Text('Weekly'),
-          leading: Radio<Frequency>(
-            value: Frequency.weekly,
-            groupValue: _frequency,
-            onChanged: (value) {
+          ListTile(
+            title: const Text('Weekly'),
+            leading: Radio<Frequency>(
+              value: Frequency.weekly,
+              groupValue: _frequency,
+              onChanged: (value) {
+                setState(() {
+                  _frequency = value!;
+                });
+              },
+            ),
+            onTap: () {
               setState(() {
-                _frequency = value!;
+                _frequency = Frequency.weekly;
               });
             },
           ),
-          onTap: () {
-            setState(() {
-              _frequency = Frequency.weekly;
-            });
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

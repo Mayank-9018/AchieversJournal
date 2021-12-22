@@ -10,7 +10,7 @@ class NewGoalPage1 extends StatelessWidget {
       children: [
         Text(
           "What's your goal?",
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headline5,
         ),
         const SizedBox(
           height: 50,
