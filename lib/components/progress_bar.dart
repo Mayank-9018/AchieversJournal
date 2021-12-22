@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
   final IconData icon;
-  final String goal;
+  final String goalName;
   final int progress;
   final int maxGoal;
-  const ProgressBar(this.icon, this.goal, this.progress, this.maxGoal,
-      {Key? key})
+  final Goal? goal;
+  const ProgressBar(this.icon, this.goalName, this.progress, this.maxGoal,
+      {Key? key, this.goal})
       : super(key: key);
 
-  ProgressBar.fromGoal(Goal goal, {Key? key})
-      : icon = IconData(goal.icon!, fontFamily: 'MaterialIcons'),
-        goal = goal.name,
+  ProgressBar.fromGoal(this.goal, {Key? key})
+      : icon = IconData(goal!.icon!, fontFamily: 'MaterialIcons'),
+        goalName = goal.name,
         progress = goal.history!.first['achieved'],
         maxGoal = goal.history!.first['goal'],
         super(key: key);
@@ -62,7 +63,7 @@ class ProgressBar extends StatelessWidget {
                 width: 15,
               ),
               Text(
-                goal,
+                goalName,
                 style: const TextStyle(fontSize: 18),
               )
             ],
