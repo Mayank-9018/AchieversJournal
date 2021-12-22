@@ -1,4 +1,5 @@
 import 'package:achievers_journal/models/goal.dart';
+import 'package:achievers_journal/screens/goal_detail.dart';
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatefulWidget {
@@ -55,9 +56,7 @@ class _ProgressBarState extends State<ProgressBar>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Scaffold(
-                      appBar: AppBar(),
-                    ),
+                    builder: (context) => GoalDetailScreen(widget.goal!),
                   ),
                 );
                 _animationController.reverse();
