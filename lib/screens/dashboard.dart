@@ -1,6 +1,7 @@
 import 'package:achievers_journal/components/progress_bar.dart';
 import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/goal.dart';
+import 'package:achievers_journal/screens/new_goal.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,6 +59,18 @@ class DashboardScreen extends StatelessWidget {
                 }
               },
             ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: FloatingActionButton.extended(
+            splashColor: Colors.blue.shade300,
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NewGoalScreen(),
+              ));
+            },
+            icon: const Icon(Icons.add),
+            label: const Text('New Goal'),
           ),
         );
       },
