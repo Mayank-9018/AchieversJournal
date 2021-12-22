@@ -25,7 +25,7 @@ class DashboardScreen extends StatelessWidget {
                           .rdbData(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Column(
+                          return ListView(
                             children: getProgressBars(snapshot
                                 .data!.snapshot.value as Map<dynamic, dynamic>),
                           );
@@ -72,6 +72,11 @@ class DashboardScreen extends StatelessWidget {
           Goal.fromMap(
             goal,
           ),
+        ),
+      );
+      bars.add(
+        const SizedBox(
+          height: 10,
         ),
       );
     }
