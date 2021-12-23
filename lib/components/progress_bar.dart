@@ -3,20 +3,30 @@ import 'package:achievers_journal/screens/goal_detail.dart';
 import 'package:flutter/material.dart';
 
 class ProgressBar extends StatefulWidget {
-  final IconData icon;
-  final String goalName;
+  final IconData? icon;
+  final String? goalName;
   final int progress;
   final int maxGoal;
   final Goal? goal;
+  final bool isHistory;
   const ProgressBar(this.icon, this.goalName, this.progress, this.maxGoal,
       {Key? key, this.goal})
-      : super(key: key);
+      : isHistory = false,
+        super(key: key);
 
   ProgressBar.fromGoal(this.goal, {Key? key})
       : icon = IconData(goal!.icon!, fontFamily: 'MaterialIcons'),
         goalName = goal.name,
         progress = goal.history!.first['achieved'],
         maxGoal = goal.history!.first['goal'],
+        isHistory = false,
+        super(key: key);
+
+  const ProgressBar.history(this.progress, this.maxGoal, {Key? key})
+      : isHistory = true,
+        goal = null,
+        goalName = null,
+        icon = null,
         super(key: key);
 
   @override
@@ -26,7 +36,6 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-
   @override
   void initState() {
     super.initState();
@@ -45,22 +54,22 @@ class _ProgressBarState extends State<ProgressBar>
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      scale: Tween(begin: 1.0, end: 0.90).animate(
+      scale: Tween(begin: 1.0, end: 0.95).animate(
         CurvedAnimation(parent: _animationController, curve: Curves.linear),
       ),
       child: GestureDetector(
-        onTap: widget.goal == null
-            ? () {}
-            : () async {
-                await _animationController.forward();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GoalDetailScreen(widget.goal!),
-                  ),
-                );
-                _animationController.reverse();
-              },
+        onTap: () async {
+          await _animationController.forward();
+          if (widget.goal != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GoalDetailScreen(widget.goal!),
+              ),
+            );
+          }
+          _animationController.reverse();
+        },
         child: Stack(
           children: [
             Container(
@@ -73,17 +82,15 @@ class _ProgressBarState extends State<ProgressBar>
             ),
             LayoutBuilder(
               builder: (context, constraints) => Padding(
-                padding: const EdgeInsets.only(top: 1.5, left: 1.5),
+                padding: const EdgeInsets.only(top: 1.5, left: 1.5, right: 1.5),
                 child: Container(
                   height: 70 - 3.0,
                   width: (constraints.maxWidth *
-                          widget.progress /
-                          widget.maxGoal) -
-                      3.0,
+                      (widget.progress / widget.maxGoal)),
                   decoration: BoxDecoration(
-                    color: widget.progress / widget.maxGoal > 0.7
+                    color: (widget.progress / widget.maxGoal) > 0.7
                         ? Colors.green
-                        : widget.progress / widget.maxGoal > 0.3
+                        : (widget.progress / widget.maxGoal) > 0.3
                             ? Colors.amber
                             : Colors.red,
                     borderRadius: BorderRadius.circular(14.0),
@@ -92,26 +99,41 @@ class _ProgressBarState extends State<ProgressBar>
               ),
             ),
             Positioned(
-              top: 16.5,
-              left: 10,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Icon(
-                    widget.icon,
-                    size: 35,
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    widget.goalName,
-                    style: const TextStyle(fontSize: 18),
-                  )
-                ],
-              ),
+              top: widget.isHistory ? 25 : 16.5,
+              left: widget.isHistory
+                  ? (MediaQuery.of(context).size.width - 100) *
+                          (widget.progress / widget.maxGoal) -
+                      ((widget.progress / widget.maxGoal) < 0.5 ? 20 : 0) +
+                      ((widget.progress / widget.maxGoal) == 0.0 ? 40 : 0)
+                  : 10,
+              child: widget.isHistory
+                  ? Text(
+                      (((widget.progress / widget.maxGoal)) * 100)
+                          .round()
+                          .toString(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6!
+                          .copyWith(fontSize: 16.0),
+                    )
+                  : Row(
+                      children: [
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Icon(
+                          widget.icon,
+                          size: 35,
+                        ),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Text(
+                          widget.goalName!,
+                          style: const TextStyle(fontSize: 18),
+                        )
+                      ],
+                    ),
             )
           ],
         ),
