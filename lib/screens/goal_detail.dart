@@ -14,7 +14,8 @@ class _GoalDetailScreenState extends State<GoalDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(
+        padding: const EdgeInsets.all(10.0),
         children: [
           GoalCard(widget.goal),
         ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:achievers_journal/components/custom_cpi_painter.dart';
 import 'package:achievers_journal/models/goal.dart';
 import 'package:flutter/material.dart';
 
@@ -16,16 +17,20 @@ class _GoalCardState extends State<GoalCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
   late Animation<double> animation;
+  late double percentage;
 
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    percentage = widget.goal.history!.first['achieved'] /
+        widget.goal.history!.first['goal'];
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    );
     animation = Tween<double>(
       begin: 0.0,
-      end: widget.goal.history!.first['achieved'] /
-          widget.goal.history!.first['goal'],
+      end: percentage,
     ).animate(_animationController);
     Timer(const Duration(milliseconds: 500), () {
       _animationController.forward();
@@ -43,58 +48,60 @@ class _GoalCardState extends State<GoalCard>
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        color: Colors.green.shade200,
+        border: Border.all(),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.goal.name,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(height: 10),
-              Text(widget.goal.description ?? ''),
-              // DateTime.tryParse(goal.history.where((element) => false))
-              Text(
-                  '${widget.goal.history!.first['achieved'].toString()} of ${widget.goal.history!.first['goal'].toString()}'),
-            ],
+          ConstrainedBox(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width / 2 - 50),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.goal.name,
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                const SizedBox(height: 20),
+                Text(widget.goal.description ?? ''),
+                const SizedBox(height: 5),
+                Text(
+                    '${widget.goal.history!.first['achieved'].toString()} of ${widget.goal.history!.first['goal'].toString()}'),
+              ],
+            ),
           ),
           AnimatedBuilder(
-            child: Text(((widget.goal.history!.first['achieved'] /
-                        widget.goal.history!.first['goal']) *
-                    100)
-                .round()
-                .toString()),
+            child: Text(
+              ((widget.goal.history!.first['achieved'] /
+                              widget.goal.history!.first['goal']) *
+                          100)
+                      .round()
+                      .toString() +
+                  '%',
+              style: Theme.of(context).textTheme.headline5,
+            ),
             animation: animation,
             builder: (context, child) => Stack(
               alignment: Alignment.center,
               children: [
                 SizedBox(
-                  height: 100,
-                  width: 100,
-                  child: CircularProgressIndicator( // Create a custom circular progress indicator with boder and rounded corners
-                    color: Colors.red, // TODO: Fix color
-                    strokeWidth: 10.0,
-                    value: animation.value,
-                  ),
-                ),
+                    height: 150,
+                    width: 150,
+                    child: CustomPaint(
+                      painter: CustomCPI(
+                          animation.value,
+                          percentage > 0.7
+                              ? Colors.green
+                              : percentage > 0.3
+                                  ? Colors.amber
+                                  : Colors.red),
+                    )),
                 child!,
               ],
             ),
           )
-          // TweenAnimationBuilder<double>(
-          //   tween: Tween<double>(
-          //       begin: 0.0,
-          //       end: widget.goal.history!.first['achieved'] /
-          //           widget.goal.history!.first['goal']),
-          //   duration: const Duration(milliseconds: 4000),
-          //   builder: (context, value, _) =>
-          //       CircularProgressIndicator(value: value),
-          // ),
         ],
       ),
     );
