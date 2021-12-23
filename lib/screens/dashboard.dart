@@ -27,6 +27,11 @@ class DashboardScreen extends StatelessWidget {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           return ListView(
+                            padding: const EdgeInsets.only(
+                              top: 50,
+                              left: 20,
+                              right: 20,
+                            ),
                             children: getProgressBars(snapshot
                                 .data!.snapshot.value as Map<dynamic, dynamic>),
                           );
@@ -63,10 +68,13 @@ class DashboardScreen extends StatelessWidget {
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
           floatingActionButton: FloatingActionButton.extended(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
             splashColor: Colors.blue.shade300,
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => NewGoalScreen(),
+                builder: (context) => const NewGoalScreen(),
               ));
             },
             icon: const Icon(Icons.add),
