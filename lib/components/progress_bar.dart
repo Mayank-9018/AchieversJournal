@@ -101,7 +101,7 @@ class _ProgressBarState extends State<ProgressBar>
             Positioned(
               top: widget.isHistory ? 25 : 16.5,
               left: widget.isHistory
-                  ? (MediaQuery.of(context).size.width - 100) *
+                  ? (MediaQuery.of(context).size.width - 150) *
                           (widget.progress / widget.maxGoal) -
                       ((widget.progress / widget.maxGoal) < 0.5 ? 20 : 0) +
                       ((widget.progress / widget.maxGoal) == 0.0 ? 40 : 0)
