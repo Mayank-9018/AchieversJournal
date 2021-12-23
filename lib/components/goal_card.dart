@@ -26,7 +26,7 @@ class _GoalCardState extends State<GoalCard>
         widget.goal.history!.first['goal'];
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 500),
     );
     animation = Tween<double>(
       begin: 0.0,
