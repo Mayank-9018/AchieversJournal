@@ -21,6 +21,7 @@ class AJApp extends StatelessWidget {
     return MaterialApp(
       theme: lightTheme,
       darkTheme: darkTheme,
+      debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       home: const OnboardingScreen(),
     );
