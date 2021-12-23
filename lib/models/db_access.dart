@@ -31,6 +31,7 @@ class Database {
   /// realtime database; Used when user opts in to sync data;
   Stream<DatabaseEvent> rdbData() {
     FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
+    firebaseInstance.setPersistenceEnabled(true);
     return firebaseInstance.ref('/userId').onValue;
   }
 
