@@ -15,6 +15,29 @@ class DashboardScreen extends StatelessWidget {
       create: (context) => Database(),
       builder: (context, child) {
         return Scaffold(
+          appBar: AppBar(),
+          drawer: Drawer(
+            child: ListView(
+              children: [
+                const Center(
+                  child: DrawerHeader(
+                    padding: EdgeInsets.only(top: 75.0),
+                    child: Text(
+                      'Achievers Journal',
+                      style: TextStyle(
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: const Text('Settings'),
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
           body: Center(
             child: FutureBuilder<bool>(
               future: Provider.of<Database>(context, listen: false).isLoggedIn,
