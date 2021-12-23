@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:achievers_journal/components/date_circle.dart';
 import 'package:achievers_journal/components/goal_card.dart';
 import 'package:achievers_journal/components/progress_bar.dart';
@@ -12,7 +13,28 @@ class GoalDetailScreen extends StatefulWidget {
   _GoalDetailScreenState createState() => _GoalDetailScreenState();
 }
 
-class _GoalDetailScreenState extends State<GoalDetailScreen> {
+class _GoalDetailScreenState extends State<GoalDetailScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    Timer(const Duration(milliseconds: 500), () {
+      _animationController.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,19 +71,30 @@ class _GoalDetailScreenState extends State<GoalDetailScreen> {
   }
 
   Widget getHistoryBar(int index) {
-    return Row(
-      children: [
-        DateCircle(widget.goal.history!.elementAt(index)['date']),
-        const SizedBox(
-          width: 10,
+    return FadeTransition(
+      opacity: _animationController,
+      child: SlideTransition(
+        position: Tween<Offset>(
+                begin: Offset(0, 5 + index.toDouble()*5), end: Offset.zero)
+            .animate(
+          CurvedAnimation(
+              parent: _animationController, curve: Curves.decelerate),
         ),
-        Expanded(
-          child: ProgressBar.history(
-            widget.goal.history!.elementAt(index)['achieved'],
-            widget.goal.history!.elementAt(index)['goal'],
-          ),
+        child: Row(
+          children: [
+            DateCircle(widget.goal.history!.elementAt(index)['date']),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: ProgressBar.history(
+                widget.goal.history!.elementAt(index)['achieved'],
+                widget.goal.history!.elementAt(index)['goal'],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
