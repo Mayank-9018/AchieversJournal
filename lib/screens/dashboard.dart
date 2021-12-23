@@ -2,6 +2,7 @@ import 'package:achievers_journal/components/progress_bar.dart';
 import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/goal.dart';
 import 'package:achievers_journal/screens/new_goal.dart';
+import 'package:achievers_journal/screens/settings.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +32,17 @@ class DashboardScreen extends StatelessWidget {
                   ),
                 ),
                 ListTile(
+                  minLeadingWidth: 30.0,
+                  contentPadding: const EdgeInsets.symmetric(horizontal:40.0),
                   leading: const Icon(Icons.settings),
                   title: const Text('Settings'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SettingsScreen(),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
