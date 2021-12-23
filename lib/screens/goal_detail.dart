@@ -1,3 +1,4 @@
+import 'package:achievers_journal/components/date_circle.dart';
 import 'package:achievers_journal/components/goal_card.dart';
 import 'package:achievers_journal/components/progress_bar.dart';
 import 'package:achievers_journal/models/goal.dart';
@@ -48,9 +49,19 @@ class _GoalDetailScreenState extends State<GoalDetailScreen> {
   }
 
   Widget getHistoryBar(int index) {
-    return ProgressBar.history(
-      widget.goal.history!.elementAt(index)['achieved'],
-      widget.goal.history!.elementAt(index)['goal'],
+    return Row(
+      children: [
+        DateCircle(widget.goal.history!.elementAt(index)['date']),
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          child: ProgressBar.history(
+            widget.goal.history!.elementAt(index)['achieved'],
+            widget.goal.history!.elementAt(index)['goal'],
+          ),
+        ),
+      ],
     );
   }
 }
