@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:achievers_journal/components/custom_cpi_painter.dart';
 import 'package:achievers_journal/models/goal.dart';
 import 'package:flutter/material.dart';
@@ -18,23 +17,23 @@ class _GoalCardState extends State<GoalCard>
   late final AnimationController _animationController;
   late Animation<double> animation;
   late double percentage;
+  late double oldPercentage;
 
   @override
   void initState() {
     super.initState();
-    percentage = widget.goal.history!.first['achieved'] /
-        widget.goal.history!.first['goal'];
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    animation = Tween<double>(
-      begin: 0.0,
-      end: percentage,
-    ).animate(_animationController);
     Timer(const Duration(milliseconds: 500), () {
       _animationController.forward();
     });
+    percentage = widget.goal.history!.first['achieved'] /
+        widget.goal.history!.first['goal'];
+    oldPercentage = percentage;
+    animation = Tween<double>(begin: 0.0, end: percentage)
+        .animate(_animationController);
   }
 
   @override
@@ -45,6 +44,9 @@ class _GoalCardState extends State<GoalCard>
 
   @override
   Widget build(BuildContext context) {
+    percentage = widget.goal.history!.first['achieved'] /
+        widget.goal.history!.first['goal'];
+    runAnimation();
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
@@ -74,12 +76,7 @@ class _GoalCardState extends State<GoalCard>
           ),
           AnimatedBuilder(
             child: Text(
-              ((widget.goal.history!.first['achieved'] /
-                              widget.goal.history!.first['goal']) *
-                          100)
-                      .round()
-                      .toString() +
-                  '%',
+              (percentage * 100).round().toString() + '%',
               style: Theme.of(context).textTheme.headline5,
             ),
             animation: animation,
@@ -105,5 +102,22 @@ class _GoalCardState extends State<GoalCard>
         ],
       ),
     );
+  }
+
+  void runAnimation() async {
+    if (percentage > oldPercentage) {
+      animation = Tween<double>(
+        begin: oldPercentage,
+        end: percentage,
+      ).animate(_animationController);
+      _animationController.animateTo(percentage);
+    } else {
+      animation = Tween<double>(
+        begin: percentage,
+        end: oldPercentage,
+      ).animate(_animationController);
+      _animationController.reverse();
+    }
+    oldPercentage = percentage;
   }
 }
