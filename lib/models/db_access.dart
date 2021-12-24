@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Database {
   late Future<bool> isLoggedIn;
   late dynamic data;
+  FirebaseDatabase? _firebaseInstance;
 
   Database() {
     isLoggedIn = getLoginStatus();
@@ -30,9 +31,13 @@ class Database {
   /// Returns a `Stream` of type `DatabaseEvent` from the firebase
   /// realtime database; Used when user opts in to sync data;
   Stream<DatabaseEvent> rdbData() {
-    FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
-    firebaseInstance.setPersistenceEnabled(true);
-    return firebaseInstance.ref('/userId').onValue;
+    _firebaseInstance = FirebaseDatabase.instance;
+    _firebaseInstance!.setPersistenceEnabled(true);
+    return _firebaseInstance!.ref('/userId').onValue;
+  }
+
+  Stream<DatabaseEvent> getGoalDetails(int position) {
+    return _firebaseInstance!.ref('/userId/goals/$position/').onValue;
   }
 
   /// Returns a `Future` of Map already jsonDecoded
