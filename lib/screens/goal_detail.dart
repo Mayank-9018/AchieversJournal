@@ -40,10 +40,17 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(
+          top: 10,
+          left: 10,
+          right: 10,
+        ),
         child: Column(
           children: [
-            GoalCard(widget.goal),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: GoalCard(widget.goal),
+            ),
             const SizedBox(height: 20),
             Center(
               child: Text(
