@@ -64,7 +64,7 @@ class _ProgressBarState extends State<ProgressBar>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => GoalDetailScreen(widget.goal!),
+                builder: (context) => GoalDetailScreen(widget.goal!.position!),
               ),
             );
           }
