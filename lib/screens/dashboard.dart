@@ -12,119 +12,112 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => Database(),
-      builder: (context, child) {
-        return Scaffold(
-          appBar: AppBar(),
-          drawer: Drawer(
-            child: ListView(
-              children: [
-                const Center(
-                  child: DrawerHeader(
-                    padding: EdgeInsets.only(top: 75.0),
-                    child: Text(
-                      'Achievers Journal',
-                      style: TextStyle(
-                        fontSize: 24,
-                      ),
-                    ),
+    return Scaffold(
+      appBar: AppBar(),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            const Center(
+              child: DrawerHeader(
+                padding: EdgeInsets.only(top: 75.0),
+                child: Text(
+                  'Achievers Journal',
+                  style: TextStyle(
+                    fontSize: 24,
                   ),
                 ),
-                ListTile(
-                  minLeadingWidth: 30.0,
-                  contentPadding: const EdgeInsets.symmetric(horizontal:40.0),
-                  leading: const Icon(Icons.settings),
-                  title: const Text('Settings'),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const SettingsScreen(),
-                      ),
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
-          ),
-          body: Center(
-            child: FutureBuilder<bool>(
-              future: Provider.of<Database>(context, listen: false).isLoggedIn,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!) {
-                    return StreamBuilder<DatabaseEvent>(
-                      stream: Provider.of<Database>(context, listen: false).data
-                          as Stream<DatabaseEvent>,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView(
-                            padding: const EdgeInsets.only(
-                              top: 50,
-                              left: 20,
-                              right: 20,
-                            ),
-                            children: getProgressBars(snapshot
-                                .data!.snapshot.value as Map<dynamic, dynamic>),
-                          );
-                        } else {
-                          return const CircularProgressIndicator(
-                            color: Colors.red,
-                          );
-                        }
-                      },
-                    );
-                  } else {
-                    return FutureBuilder<Map<String, dynamic>>(
-                      future: Provider.of<Database>(context, listen: false)
-                          .localData(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(snapshot.data!.toString());
-                        } else {
-                          return const CircularProgressIndicator(
-                            color: Colors.green,
-                          );
-                        }
-                      },
-                    );
-                  }
-                } else {
-                  return const CircularProgressIndicator(
-                    color: Colors.blue,
-                  );
-                }
+            ListTile(
+              minLeadingWidth: 30.0,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+              leading: const Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
               },
             ),
-          ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: FloatingActionButton.extended(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            splashColor: Colors.blue.shade300,
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const NewGoalScreen(),
-              ));
-            },
-            icon: const Icon(Icons.add),
-            label: const Text('New Goal'),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
+      body: Center(
+        child: FutureBuilder<bool>(
+          future: Provider.of<Database>(context, listen: false).isLoggedIn,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!) {
+                return StreamBuilder<DatabaseEvent>(
+                  stream: Provider.of<Database>(context, listen: false).data
+                      as Stream<DatabaseEvent>,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView(
+                        padding: const EdgeInsets.only(
+                          top: 50,
+                          left: 20,
+                          right: 20,
+                        ),
+                        children: getProgressBars(snapshot.data!.snapshot.value
+                            as Map<dynamic, dynamic>),
+                      );
+                    } else {
+                      return const CircularProgressIndicator(
+                        color: Colors.red,
+                      );
+                    }
+                  },
+                );
+              } else {
+                return FutureBuilder<Map<String, dynamic>>(
+                  future:
+                      Provider.of<Database>(context, listen: false).localData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(snapshot.data!.toString());
+                    } else {
+                      return const CircularProgressIndicator(
+                        color: Colors.green,
+                      );
+                    }
+                  },
+                );
+              }
+            } else {
+              return const CircularProgressIndicator(
+                color: Colors.blue,
+              );
+            }
+          },
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        splashColor: Colors.blue.shade300,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const NewGoalScreen(),
+          ));
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('New Goal'),
+      ),
     );
   }
 
   List<Widget> getProgressBars(Map<dynamic, dynamic> data) {
     List<Widget> bars = [];
+    int i = 0;
     for (Map<dynamic, dynamic> goal in data['goals']) {
       bars.add(
         ProgressBar.fromGoal(
-          Goal.fromMap(
-            goal,
-          ),
+          Goal.fromMap(goal, i),
         ),
       );
       bars.add(
@@ -132,6 +125,7 @@ class DashboardScreen extends StatelessWidget {
           height: 10,
         ),
       );
+      i++;
     }
     return bars;
   }
