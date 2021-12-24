@@ -38,6 +38,7 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -56,6 +57,7 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
             const SizedBox(height: 20),
             Expanded(
               child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.all(15.0),
                 itemCount: widget.goal.history?.length ?? 0,
                 itemBuilder: (context, index) => getHistoryBar(index),
@@ -75,7 +77,7 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
       opacity: _animationController,
       child: SlideTransition(
         position: Tween<Offset>(
-                begin: Offset(0, 5 + index.toDouble()*5), end: Offset.zero)
+                begin: Offset(0, 5 + index.toDouble() * 5), end: Offset.zero)
             .animate(
           CurvedAnimation(
               parent: _animationController, curve: Curves.decelerate),
