@@ -78,9 +78,11 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
                           child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.all(15.0),
-                            itemCount: _goal.history?.length ?? 0,
+                            itemCount: _goal.history == null
+                                ? 0
+                                : _goal.history!.length - 1,
                             itemBuilder: (context, index) =>
-                                getHistoryBar(index),
+                                getHistoryBar(index + 1),
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
                               height: 10,
