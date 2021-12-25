@@ -105,18 +105,13 @@ class _GoalCardState extends State<GoalCard>
   }
 
   void runAnimation() async {
-    if (percentage > oldPercentage) {
+    if (percentage > oldPercentage || oldPercentage > percentage) {
+      await _animationController.reverse();
       animation = Tween<double>(
-        begin: oldPercentage,
+        begin: 0,
         end: percentage,
       ).animate(_animationController);
-      _animationController.animateTo(percentage);
-    } else {
-      animation = Tween<double>(
-        begin: percentage,
-        end: oldPercentage,
-      ).animate(_animationController);
-      _animationController.reverse();
+      _animationController.forward();
     }
     oldPercentage = percentage;
   }
