@@ -5,6 +5,7 @@ class Goal {
   int? icon;
   List<dynamic>? history;
   int? position;
+  String? unit;
   Goal(this.id, this.name, {this.description, this.history});
 
   Goal.fromMap(Map<dynamic, dynamic> map, this.position)
@@ -12,5 +13,6 @@ class Goal {
         name = map['name'],
         description = map['description'],
         icon = map['icon'],
-        history = map['history'];
+        history = map['history'],
+        unit = map['unit'];
 }
