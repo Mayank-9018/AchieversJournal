@@ -83,13 +83,24 @@ class _GoalCardState extends State<GoalCard>
                       ),
                     ),
                     onPressed: () {
-                      Provider.of<Database>(context, listen: false)
-                          .updateAchieved(
-                        widget.goal.position!,
-                        Random().nextInt(
+                      if (widget.goal.hasToday) {
+                        Provider.of<Database>(context, listen: false)
+                            .updateAchieved(
+                          widget.goal.position!,
+                          Random().nextInt(
+                            widget.goal.history!.first['goal'] + 1,
+                          ),
+                        );
+                      } else {
+                        widget.goal.history!.first['achieved'] = Random().nextInt(
                           widget.goal.history!.first['goal'] + 1,
-                        ),
-                      );
+                        );
+                        Provider.of<Database>(context, listen: false)
+                            .updateHistory(
+                          widget.goal.position!,
+                          widget.goal.history!,
+                        );
+                      }
                     },
                     child: const Text('Update'),
                   ),

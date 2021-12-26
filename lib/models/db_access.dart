@@ -66,4 +66,9 @@ class Database {
         .ref('/userId/goals/$position/history/0/achieved/')
         .set(newValue);
   }
+
+  /// Takes `position` in the goals list and `history` and competely updates the entire history of the goal.
+  void updateHistory(int position, List<dynamic> history) {
+    _firebaseInstance!.ref('/userId/goals/$position/history/').set(history);
+  }
 }
