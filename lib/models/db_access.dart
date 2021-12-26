@@ -59,4 +59,11 @@ class Database {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
   }
+
+  /// Takes `position` in the goals list and a `newValue` to update to.
+  void updateAchieved(int position, int newValue) {
+    _firebaseInstance!
+        .ref('/userId/goals/$position/history/0/achieved/')
+        .set(newValue);
+  }
 }

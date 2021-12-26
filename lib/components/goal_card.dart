@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:achievers_journal/components/custom_cpi_painter.dart';
+import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/goal.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GoalCard extends StatefulWidget {
   final Goal goal;
@@ -70,7 +73,7 @@ class _GoalCardState extends State<GoalCard>
                 Text(widget.goal.description ?? ''),
                 const SizedBox(height: 5),
                 Text(
-                    '${widget.goal.history!.first['achieved'].toString()} of ${widget.goal.history!.first['goal'].toString()}'),
+                    '${widget.goal.history!.first['achieved'].toString()} of ${widget.goal.history!.first['goal'].toString()} ${widget.goal.unit}'),
                 const SizedBox(height: 10),
                 Center(
                   child: OutlinedButton(
@@ -79,7 +82,15 @@ class _GoalCardState extends State<GoalCard>
                         const EdgeInsets.symmetric(horizontal: 40),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<Database>(context, listen: false)
+                          .updateAchieved(
+                        widget.goal.position!,
+                        Random().nextInt(
+                          widget.goal.history!.first['goal'] + 1,
+                        ),
+                      );
+                    },
                     child: const Text('Update'),
                   ),
                 ),
