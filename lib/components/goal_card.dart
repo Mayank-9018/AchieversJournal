@@ -71,6 +71,18 @@ class _GoalCardState extends State<GoalCard>
                 const SizedBox(height: 5),
                 Text(
                     '${widget.goal.history!.first['achieved'].toString()} of ${widget.goal.history!.first['goal'].toString()}'),
+                const SizedBox(height: 10),
+                Center(
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all(
+                        const EdgeInsets.symmetric(horizontal: 40),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: const Text('Update'),
+                  ),
+                ),
               ],
             ),
           ),
