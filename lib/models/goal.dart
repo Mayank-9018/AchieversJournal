@@ -10,6 +10,7 @@ class Goal {
   String? unit;
   int? currentGoal;
   bool hasToday = true;
+  bool isTimeBased = false;
   Goal(this.id, this.name, {this.description, this.history});
 
   Goal.fromMap(Map<dynamic, dynamic> map, this.position)
@@ -19,7 +20,8 @@ class Goal {
         icon = map['icon'],
         history = List.from(map['history']),
         unit = map['unit'],
-        currentGoal = map['currentGoal'] {
+        currentGoal = map['currentGoal'],
+        isTimeBased = map['isTimeBased'] ?? false {
     if (history != null) {
       if (!_isSameDate(DateTime.parse(history!.first['date']))) {
         hasToday = false;

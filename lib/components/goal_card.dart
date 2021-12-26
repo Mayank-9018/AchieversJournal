@@ -47,8 +47,8 @@ class _GoalCardState extends State<GoalCard>
 
   @override
   Widget build(BuildContext context) {
-    percentage = widget.goal.history!.first['achieved'] /
-        widget.goal.history!.first['goal'];
+    Goal goal = widget.goal;
+    percentage = goal.history!.first['achieved'] / goal.history!.first['goal'];
     runAnimation();
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -66,14 +66,14 @@ class _GoalCardState extends State<GoalCard>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.goal.name,
+                  goal.name,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(height: 20),
-                Text(widget.goal.description ?? ''),
+                Text(goal.description ?? ''),
                 const SizedBox(height: 5),
                 Text(
-                    '${widget.goal.history!.first['achieved'].toString()} of ${widget.goal.history!.first['goal'].toString()} ${widget.goal.unit}'),
+                    "${goal.history!.first['achieved'].toString()} of ${goal.history!.first['goal'].toString()} ${goal.isTimeBased ? 'minutes' : goal.unit}"),
                 const SizedBox(height: 10),
                 Center(
                   child: OutlinedButton(
@@ -83,22 +83,22 @@ class _GoalCardState extends State<GoalCard>
                       ),
                     ),
                     onPressed: () {
-                      if (widget.goal.hasToday) {
+                      if (goal.hasToday) {
                         Provider.of<Database>(context, listen: false)
                             .updateAchieved(
-                          widget.goal.position!,
+                          goal.position!,
                           Random().nextInt(
-                            widget.goal.history!.first['goal'] + 1,
+                            goal.history!.first['goal'] + 1,
                           ),
                         );
                       } else {
-                        widget.goal.history!.first['achieved'] = Random().nextInt(
-                          widget.goal.history!.first['goal'] + 1,
+                        goal.history!.first['achieved'] = Random().nextInt(
+                          goal.history!.first['goal'] + 1,
                         );
                         Provider.of<Database>(context, listen: false)
                             .updateHistory(
-                          widget.goal.position!,
-                          widget.goal.history!,
+                          goal.position!,
+                          goal.history!,
                         );
                       }
                     },
