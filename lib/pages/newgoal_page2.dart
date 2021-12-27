@@ -52,14 +52,15 @@ class _NewGoalPage2State extends State<NewGoalPage2> {
             },
           ),
           ListTile(
-            title: const Text('Weekly'),
-            leading: Radio<Frequency>(
+            enabled: false,
+            title: const Text('Weekly (Coming Soon)'),
+            leading: Radio<Frequency>(  
               value: Frequency.weekly,
               groupValue: _frequency,
               onChanged: (value) {
-                setState(() {
-                  _frequency = value!;
-                });
+                // setState(() {
+                //   _frequency = value!;
+                // });
               },
             ),
             onTap: () {
