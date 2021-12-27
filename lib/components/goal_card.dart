@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:achievers_journal/components/custom_cpi_painter.dart';
 import 'package:achievers_journal/components/update_dialog.dart';
+import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/goal.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GoalCard extends StatefulWidget {
   final Goal goal;
@@ -84,26 +86,22 @@ class _GoalCardState extends State<GoalCard>
                       showDialog(
                         context: context,
                         builder: (context) => UpdateDialog(
-                            goal.history!.first as Map<dynamic, dynamic>),
+                          goal.history!.first as Map<dynamic, dynamic>,
+                          (newVal) {
+                            if (goal.hasToday) {
+                              Provider.of<Database>(context, listen: false)
+                                  .updateAchieved(goal.position!, newVal);
+                            } else {
+                              goal.history!.first['achieved'] = newVal;
+                              Provider.of<Database>(context, listen: false)
+                                  .updateHistory(
+                                goal.position!,
+                                goal.history!,
+                              );
+                            }
+                          },
+                        ),
                       );
-                      // if (goal.hasToday) {
-                      // Provider.of<Database>(context, listen: false)
-                      //     .updateAchieved(
-                      //   goal.position!,
-                      //   Random().nextInt(
-                      //     goal.history!.first['goal'] + 1,
-                      //   ),
-                      // );
-                      // } else {
-                      // goal.history!.first['achieved'] = Random().nextInt(
-                      // goal.history!.first['goal'] + 1,
-                      // );
-                      // Provider.of<Database>(context, listen: false)
-                      //     .updateHistory(
-                      //   goal.position!,
-                      //   goal.history!,
-                      // );
-                      // }
                     },
                     child: const Text('Update'),
                   ),
@@ -126,7 +124,7 @@ class _GoalCardState extends State<GoalCard>
                     child: CustomPaint(
                       painter: CustomCPI(
                           animation.value,
-                          percentage > 0.7
+                          percentage >= 0.7
                               ? Colors.green
                               : percentage > 0.3
                                   ? Colors.amber

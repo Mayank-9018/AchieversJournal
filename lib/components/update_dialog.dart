@@ -3,7 +3,9 @@ import 'custom_slider_thumb.dart';
 
 class UpdateDialog extends StatefulWidget {
   final Map<dynamic, dynamic> track;
-  const UpdateDialog(this.track, {Key? key}) : super(key: key);
+  final void Function(int) updateAchieved;
+  const UpdateDialog(this.track, this.updateAchieved, {Key? key})
+      : super(key: key);
 
   @override
   _UpdateDialogState createState() => _UpdateDialogState();
@@ -97,7 +99,10 @@ class _UpdateDialogState extends State<UpdateDialog> {
             right: 60,
           ),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              widget.updateAchieved(sliderValue.toInt());
+              Navigator.of(context).pop();
+            },
             child: const Text('Save'),
           ),
         )
