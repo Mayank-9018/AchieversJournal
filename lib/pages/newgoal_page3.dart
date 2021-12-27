@@ -1,4 +1,6 @@
+import 'package:achievers_journal/models/new_goal.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 enum Mode { frequency, duration }
 
@@ -11,7 +13,20 @@ class NewGoalPage3 extends StatefulWidget {
 }
 
 class _NewGoalPage3State extends State<NewGoalPage3> {
-  Mode _mode = Mode.duration;
+  Mode? _mode;
+  late final NewGoal newGoal;
+  late final TextEditingController goalController;
+  late final TextEditingController unitController;
+
+  @override
+  void initState() {
+    super.initState();
+    newGoal = Provider.of<NewGoal>(context, listen: false);
+    _mode = newGoal.isTimeBased ? Mode.duration : Mode.frequency;
+    goalController =
+        TextEditingController(text: newGoal.currentGoal.toString());
+    unitController = TextEditingController(text: newGoal.unit);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +50,14 @@ class _NewGoalPage3State extends State<NewGoalPage3> {
               onChanged: (value) {
                 setState(() {
                   _mode = value!;
+                  newGoal.isTimeBased = false;
                 });
               },
             ),
             onTap: () {
               setState(() {
                 _mode = Mode.frequency;
+                newGoal.isTimeBased = false;
               });
             },
           ),
@@ -48,22 +65,30 @@ class _NewGoalPage3State extends State<NewGoalPage3> {
             Padding(
               padding: const EdgeInsets.only(left: 75),
               child: Row(
-                children: const [
+                children: [
                   SizedBox(
                     width: 80,
                     child: TextField(
+                      controller: goalController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(hintText: '10'),
+                      decoration: const InputDecoration(hintText: '10'),
+                      onChanged: (value) {
+                        newGoal.currentGoal = int.tryParse(value) ?? 0;
+                      },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 15,
                   ),
                   SizedBox(
                     width: 120,
                     child: TextField(
-                      decoration: InputDecoration(hintText: 'pages'),
+                      controller: unitController,
+                      decoration: const InputDecoration(hintText: 'pages'),
+                      onChanged: (value) {
+                        newGoal.unit = value;
+                      },
                     ),
                   ),
                 ],
@@ -77,12 +102,16 @@ class _NewGoalPage3State extends State<NewGoalPage3> {
               onChanged: (value) {
                 setState(() {
                   _mode = value!;
+                  newGoal.isTimeBased = true;
+                  newGoal.unit = null;
                 });
               },
             ),
             onTap: () {
               setState(() {
                 _mode = Mode.duration;
+                newGoal.isTimeBased = true;
+                newGoal.unit = null;
               });
             },
           ),
@@ -90,36 +119,31 @@ class _NewGoalPage3State extends State<NewGoalPage3> {
             Padding(
               padding: const EdgeInsets.only(left: 75),
               child: Row(
-                children: const [
+                children: [
                   SizedBox(
                     width: 80,
                     child: TextField(
-                      maxLength: 2,
+                      controller: goalController,
+                      maxLength: 3,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'hrs',
+                      decoration: const InputDecoration(
+                        hintText: '30',
                         counterText: '',
                       ),
+                      onChanged: (value) {
+                        newGoal.currentGoal = int.tryParse(value) ?? 0;
+                      },
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Text(
-                      ':',
-                      style: TextStyle(fontSize: 25),
-                    ),
+                  const SizedBox(
+                    width: 10,
                   ),
-                  SizedBox(
-                    width: 80,
-                    child: TextField(
-                      maxLength: 2,
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'min',
-                        counterText: '',
-                      ),
+                  const Text(
+                    'minutes',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.grey,
                     ),
                   ),
                 ],
