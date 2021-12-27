@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:achievers_journal/components/custom_cpi_painter.dart';
-import 'package:achievers_journal/models/db_access.dart';
+import 'package:achievers_journal/components/update_dialog.dart';
 import 'package:achievers_journal/models/goal.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class GoalCard extends StatefulWidget {
   final Goal goal;
@@ -83,24 +81,29 @@ class _GoalCardState extends State<GoalCard>
                       ),
                     ),
                     onPressed: () {
-                      if (goal.hasToday) {
-                        Provider.of<Database>(context, listen: false)
-                            .updateAchieved(
-                          goal.position!,
-                          Random().nextInt(
-                            goal.history!.first['goal'] + 1,
-                          ),
-                        );
-                      } else {
-                        goal.history!.first['achieved'] = Random().nextInt(
-                          goal.history!.first['goal'] + 1,
-                        );
-                        Provider.of<Database>(context, listen: false)
-                            .updateHistory(
-                          goal.position!,
-                          goal.history!,
-                        );
-                      }
+                      showDialog(
+                        context: context,
+                        builder: (context) => UpdateDialog(
+                            goal.history!.first as Map<dynamic, dynamic>),
+                      );
+                      // if (goal.hasToday) {
+                      // Provider.of<Database>(context, listen: false)
+                      //     .updateAchieved(
+                      //   goal.position!,
+                      //   Random().nextInt(
+                      //     goal.history!.first['goal'] + 1,
+                      //   ),
+                      // );
+                      // } else {
+                      // goal.history!.first['achieved'] = Random().nextInt(
+                      // goal.history!.first['goal'] + 1,
+                      // );
+                      // Provider.of<Database>(context, listen: false)
+                      //     .updateHistory(
+                      //   goal.position!,
+                      //   goal.history!,
+                      // );
+                      // }
                     },
                     child: const Text('Update'),
                   ),
