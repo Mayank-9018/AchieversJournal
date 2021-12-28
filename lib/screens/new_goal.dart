@@ -86,12 +86,16 @@ class _NewGoalScreenState extends State<NewGoalScreen> {
                 ),
                 onPressed: () {
                   var newuser = Provider.of<NewGoal>(context, listen: false);
-                  debugPrint(newuser.title);
-                  debugPrint(newuser.description);
-                  debugPrint(newuser.iconData.toString());
-                  debugPrint(newuser.isTimeBased.toString());
-                  debugPrint(newuser.unit);
-                  debugPrint(newuser.currentGoal.toString());
+                  if (currentPage == 0 &&
+                      (newuser.title == null || newuser.title!.trim() == '')) {
+                    return;
+                  } else if (currentPage == 2 &&
+                      (newuser.currentGoal == 0 ||
+                          (!newuser.isTimeBased &&
+                              (newuser.unit == null ||
+                                  newuser.unit!.trim() == '')))) {
+                    return;
+                  }
                   if (currentPage != 3) {
                     _pageController.animateToPage(
                       _pageController.page!.round() + 1,
