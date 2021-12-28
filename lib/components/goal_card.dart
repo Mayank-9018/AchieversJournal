@@ -32,8 +32,8 @@ class _GoalCardState extends State<GoalCard>
     Timer(const Duration(milliseconds: 500), () {
       _animationController.forward();
     });
-    percentage = widget.goal.history!.first['achieved'] /
-        widget.goal.history!.first['goal'];
+    percentage = widget.goal.history.first['achieved'] /
+        widget.goal.history.first['goal'];
     oldPercentage = percentage;
     animation = Tween<double>(begin: 0.0, end: percentage)
         .animate(_animationController);
@@ -48,7 +48,7 @@ class _GoalCardState extends State<GoalCard>
   @override
   Widget build(BuildContext context) {
     Goal goal = widget.goal;
-    percentage = goal.history!.first['achieved'] / goal.history!.first['goal'];
+    percentage = goal.history.first['achieved'] / goal.history.first['goal'];
     runAnimation();
     return Container(
       padding: const EdgeInsets.all(20.0),
@@ -73,7 +73,7 @@ class _GoalCardState extends State<GoalCard>
                 Text(goal.description ?? ''),
                 const SizedBox(height: 5),
                 Text(
-                    "${goal.history!.first['achieved'].toString()} of ${goal.history!.first['goal'].toString()} ${goal.isTimeBased ? 'minutes' : goal.unit}"),
+                    "${goal.history.first['achieved'].toString()} of ${goal.history.first['goal'].toString()} ${goal.isTimeBased ? 'minutes' : goal.unit}"),
                 const SizedBox(height: 10),
                 Center(
                   child: OutlinedButton(
@@ -86,17 +86,17 @@ class _GoalCardState extends State<GoalCard>
                       showDialog(
                         context: context,
                         builder: (context) => UpdateDialog(
-                          goal.history!.first as Map<dynamic, dynamic>,
+                          goal.history.first as Map<dynamic, dynamic>,
                           (newVal) {
                             if (goal.hasToday) {
                               Provider.of<Database>(context, listen: false)
                                   .updateAchieved(goal.position!, newVal);
                             } else {
-                              goal.history!.first['achieved'] = newVal;
+                              goal.history.first['achieved'] = newVal;
                               Provider.of<Database>(context, listen: false)
                                   .updateHistory(
                                 goal.position!,
-                                goal.history!,
+                                goal.history,
                               );
                             }
                           },

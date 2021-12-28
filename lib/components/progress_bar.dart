@@ -19,8 +19,8 @@ class ProgressBar extends StatefulWidget {
             ? IconData(goal.icon!, fontFamily: 'MaterialIcons')
             : null,
         goalName = goal.name,
-        progress = goal.history!.first['achieved'],
-        maxGoal = goal.history!.first['goal'],
+        progress = goal.history.first['achieved'],
+        maxGoal = goal.history.first['goal'],
         isHistory = false,
         super(key: key);
 

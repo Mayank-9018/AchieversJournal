@@ -1,3 +1,4 @@
+import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/new_goal.dart';
 import 'package:achievers_journal/pages/newgoal_page1.dart';
 import 'package:achievers_journal/pages/newgoal_page2.dart';
@@ -102,6 +103,10 @@ class _NewGoalScreenState extends State<NewGoalScreen> {
                       duration: const Duration(milliseconds: 250),
                       curve: Curves.fastOutSlowIn,
                     );
+                  } else {
+                    Provider.of<Database>(context, listen: false)
+                        .addNewGoal(newuser.toMap());
+                    Navigator.pop(context);
                   }
                 },
               ),

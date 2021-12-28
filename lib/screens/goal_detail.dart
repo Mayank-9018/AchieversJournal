@@ -78,9 +78,9 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
                           child: ListView.separated(
                             physics: const BouncingScrollPhysics(),
                             padding: const EdgeInsets.all(15.0),
-                            itemCount: _goal.history == null
+                            itemCount: _goal.history.isEmpty
                                 ? 0
-                                : _goal.history!.length - 1,
+                                : _goal.history.length - 1,
                             itemBuilder: (context, index) =>
                                 getHistoryBar(index + 1),
                             separatorBuilder: (context, index) =>
@@ -109,14 +109,14 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
         ),
         child: Row(
           children: [
-            DateCircle(_goal.history!.elementAt(index)['date']),
+            DateCircle(_goal.history.elementAt(index)['date']),
             const SizedBox(
               width: 10,
             ),
             Expanded(
               child: ProgressBar.history(
-                _goal.history!.elementAt(index)['achieved'],
-                _goal.history!.elementAt(index)['goal'],
+                _goal.history.elementAt(index)['achieved'],
+                _goal.history.elementAt(index)['goal'],
               ),
             ),
           ],

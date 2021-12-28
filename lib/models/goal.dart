@@ -5,37 +5,36 @@ class Goal {
   String name;
   String? description;
   int? icon;
-  List<dynamic>? history;
+  List<dynamic> history;
   int? position;
   String? unit;
   int? currentGoal;
   bool hasToday = true;
   bool isTimeBased = false;
-  Goal(this.id, this.name, {this.description, this.history});
+  Goal(this.id, this.name, {this.description, this.history = const []});
 
   Goal.fromMap(Map<dynamic, dynamic> map, this.position)
       : id = map['id'],
         name = map['name'],
         description = map['description'],
         icon = map['icon'],
-        history = List.from(map['history']),
+        history = List.from(map['history'] ?? []),
         unit = map['unit'],
         currentGoal = map['currentGoal'],
         isTimeBased = map['isTimeBased'] ?? false {
-    if (history != null) {
-      if (!_isSameDate(DateTime.parse(history!.first['date']))) {
-        hasToday = false;
-        history!.insert(
-          0,
-          {
-            "achieved": 0,
-            "goal": currentGoal,
-            "date": DateFormat('yyyy-MM-dd').format(
-              DateTime.now(),
-            )
-          },
-        );
-      }
+    if (history.isEmpty ||
+        !_isSameDate(DateTime.parse(history.first['date']))) {
+      hasToday = false;
+      history.insert(
+        0,
+        {
+          "achieved": 0,
+          "goal": currentGoal,
+          "date": DateFormat('yyyy-MM-dd').format(
+            DateTime.now(),
+          )
+        },
+      );
     }
   }
 

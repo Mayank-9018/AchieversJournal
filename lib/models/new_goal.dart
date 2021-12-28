@@ -5,4 +5,16 @@ class NewGoal {
   bool isTimeBased = false;
   String? unit;
   int currentGoal = 0;
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      "name": title,
+      "description": description,
+      "icon": iconData,
+      "currentGoal": currentGoal,
+      "id": "id3",
+      "isTimeBased": isTimeBased,
+      "unit": unit,
+    };
+  }
 }
