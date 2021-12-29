@@ -135,6 +135,7 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
 
   void _showTimePickerDialog() {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) => TimePickerDialog(
         initialTime: _goal.reminderTime != null
