@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/pages/onboarding_page1.dart';
+import '/pages/onboarding_page2.dart';
 import '/pages/onboarding_page3.dart';
 import '/screens/signup.dart';
 import '/screens/login.dart';
@@ -13,7 +14,7 @@ class OnboardingScreen extends StatelessWidget {
       body: PageView(
         children: const [
           OnboardingPage1(),
-          //TODO: OnboardingPage2 with weekly analysis demo
+          OnboardingPage2(),
           OnboardingPage3(),
         ],
       ),
