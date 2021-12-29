@@ -46,6 +46,7 @@ class LoginScreen extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
+                //TODO: Register all notifications after login
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
