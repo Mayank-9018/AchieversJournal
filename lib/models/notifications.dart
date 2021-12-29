@@ -63,4 +63,8 @@ class Notifications {
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
+
+  void cancelNotifications(int goalId) {
+    flutterLocalNotificationsPlugin.cancel(goalId);
+  }
 }

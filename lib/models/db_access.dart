@@ -111,4 +111,8 @@ class Database {
       notificationBody,
     );
   }
+
+  void cancelNotification(int goalId) {
+    notifications.cancelNotifications(goalId);
+  }
 }

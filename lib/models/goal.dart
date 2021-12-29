@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Goal {
-  final String id;
+  final int id;
   String name;
   String? description;
   int? icon;

@@ -152,8 +152,19 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
         if (value == null && _goal.reminderTime == null) {
           return;
         }
-        Provider.of<Database>(context, listen: false).updateReminderTime(
-            _goal.position!,
+        Database database = Provider.of<Database>(context, listen: false);
+        if (value == null) {
+          database.cancelNotification(_goal.id);
+        } else {
+          database.scheduleNotification(
+            value.hour,
+            value.minute,
+            _goal.id,
+            _goal.name,
+            _goal.description ?? 'Time to ${_goal.name}',
+          );
+        }
+        database.updateReminderTime(_goal.position!,
             value == null ? null : '${value.hour}:${value.minute}');
       },
     );
