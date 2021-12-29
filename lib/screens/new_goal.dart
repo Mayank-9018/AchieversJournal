@@ -50,6 +50,7 @@ class _NewGoalScreenState extends State<NewGoalScreen> {
               ),
               Expanded(
                 child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
                   controller: _pageController,
                   children: [
                     const NewGoalPage1(),
