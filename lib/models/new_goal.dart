@@ -12,7 +12,7 @@ class NewGoal {
       "description": description,
       "icon": iconData,
       "currentGoal": currentGoal,
-      "id": "id3",
+      "id": 069,
       "isTimeBased": isTimeBased,
       "unit": unit,
     };
