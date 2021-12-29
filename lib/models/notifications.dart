@@ -32,6 +32,8 @@ class Notifications {
     String goalTitle,
     String goalBody,
   ) {
+    flutterLocalNotificationsPlugin
+        .cancel(goalId); // Cancel any old notifications(if exists)
     DateTime now = DateTime.now();
     DateTime notifTime = DateTime(
       now.year,
