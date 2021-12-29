@@ -119,5 +119,23 @@ ThemeData lightTheme = ThemeData(
     fillColor: MaterialStateProperty.all(Colors.blue.shade900),
     overlayColor: MaterialStateProperty.all(Colors.lightBlue.shade100),
   ),
-  // Add theme for timepicker
+  timePickerTheme: TimePickerThemeData(
+    dialHandColor: Colors.grey,
+    dialTextColor: Colors.black,
+    dayPeriodColor: Colors.grey.shade200,
+    backgroundColor: Colors.white,
+    hourMinuteColor: Colors.grey.shade200,
+    dayPeriodTextColor: MaterialStateColor.resolveWith(
+      (states) {
+        if (states.contains(MaterialState.selected)) {
+          return Colors.black;
+        } else {
+          return Colors.grey;
+        }
+      },
+    ),
+    entryModeIconColor: Colors.black,
+    dialBackgroundColor: Colors.white,
+    hourMinuteTextColor: Colors.black,
+  ),
 );
