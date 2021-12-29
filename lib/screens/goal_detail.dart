@@ -149,6 +149,9 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
       ),
     ).then(
       (value) {
+        if (value == null && _goal.reminderTime == null) {
+          return;
+        }
         Provider.of<Database>(context, listen: false).updateReminderTime(
             _goal.position!,
             value == null ? null : '${value.hour}:${value.minute}');
