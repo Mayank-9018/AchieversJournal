@@ -90,7 +90,7 @@ class _ProgressBarState extends State<ProgressBar>
                   width: (constraints.maxWidth *
                       (widget.progress / widget.maxGoal)),
                   decoration: BoxDecoration(
-                    color: (widget.progress / widget.maxGoal) > 0.7
+                    color: (widget.progress / widget.maxGoal) >= 0.7
                         ? Colors.green
                         : (widget.progress / widget.maxGoal) > 0.3
                             ? Colors.amber
