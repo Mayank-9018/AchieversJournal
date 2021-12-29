@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:achievers_journal/models/notifications.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,9 +9,11 @@ class Database {
   late Future<bool> isLoggedIn;
   late dynamic data;
   FirebaseDatabase? _firebaseInstance;
+  late final Notifications notifications;
 
   Database() {
     isLoggedIn = getLoginStatus();
+    notifications = Notifications();
   }
 
   /// Reads the `SharedPreferences` to check if the user is logged in/syncing data;
@@ -71,7 +74,7 @@ class Database {
   void updateHistory(int position, List<dynamic> history) {
     _firebaseInstance!.ref('/userId/goals/$position/history/').set(history);
   }
-  
+
   /// Takes a Map `newGoal` with details of the new goal and inserts it into the
   /// goals list as the end.
   void addNewGoal(Map<dynamic, dynamic> newGoal) async {
@@ -81,5 +84,24 @@ class Database {
     goalsList = goalsList.toList();
     goalsList.add(newGoal);
     _firebaseInstance!.ref('/userId/goals/').set(goalsList);
+  }
+
+  /// Takes `hour` in **24 hours**, `minutes`,`notificationId`,
+  /// `notificationTitle`,`notificationBody` and schedules daily repeating
+  /// notifications.
+  void scheduleNotification(
+    int hour,
+    int min,
+    int notificationId,
+    String notificationTitle,
+    String notificationBody,
+  ) {
+    notifications.scheduleNotification(
+      hour,
+      min,
+      notificationId,
+      notificationTitle,
+      notificationBody,
+    );
   }
 }
