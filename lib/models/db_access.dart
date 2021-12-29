@@ -86,6 +86,13 @@ class Database {
     _firebaseInstance!.ref('/userId/goals/').set(goalsList);
   }
 
+  /// Takes `position` and `newValue` and updates the reminder time.
+  void updateReminderTime(int position, String? newValue) {
+    _firebaseInstance!
+        .ref('/userId/goals/$position/reminderTime/')
+        .set(newValue);
+  }
+
   /// Takes `hour` in **24 hours**, `minutes`,`notificationId`,
   /// `notificationTitle`,`notificationBody` and schedules daily repeating
   /// notifications.

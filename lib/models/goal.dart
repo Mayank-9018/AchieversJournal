@@ -11,6 +11,7 @@ class Goal {
   int? currentGoal;
   bool hasToday = true;
   bool isTimeBased = false;
+  String? reminderTime;
   Goal(this.id, this.name, {this.description, this.history = const []});
 
   Goal.fromMap(Map<dynamic, dynamic> map, this.position)
@@ -21,7 +22,8 @@ class Goal {
         history = List.from(map['history'] ?? []),
         unit = map['unit'],
         currentGoal = map['currentGoal'],
-        isTimeBased = map['isTimeBased'] ?? false {
+        isTimeBased = map['isTimeBased'] ?? false,
+        reminderTime = map['reminderTime'] {
     if (history.isEmpty ||
         !_isSameDate(DateTime.parse(history.first['date']))) {
       hasToday = false;

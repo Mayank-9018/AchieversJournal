@@ -49,7 +49,15 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
               snapshot.data!.snapshot.value as Map, widget.position);
         }
         return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: _showTimePickerDialog,
+                  icon: const Icon(Icons.alarm),
+                  tooltip: 'Add a reminder',
+                )
+              ],
+            ),
             body: snapshot.hasData
                 ? Padding(
                     padding: const EdgeInsets.only(
@@ -122,6 +130,29 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
           ],
         ),
       ),
+    );
+  }
+
+  void _showTimePickerDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => TimePickerDialog(
+        initialTime: _goal.reminderTime != null
+            ? TimeOfDay(
+                hour: int.parse(_goal.reminderTime!.split(':').first),
+                minute: int.parse(
+                  _goal.reminderTime!.split(':').elementAt(1),
+                ),
+              )
+            : TimeOfDay.now(),
+        cancelText: _goal.reminderTime != null ? 'Cancel reminder' : null,
+      ),
+    ).then(
+      (value) {
+        Provider.of<Database>(context, listen: false).updateReminderTime(
+            _goal.position!,
+            value == null ? null : '${value.hour}:${value.minute}');
+      },
     );
   }
 }
