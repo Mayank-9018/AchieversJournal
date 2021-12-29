@@ -70,7 +70,8 @@ class _UpdateDialogState extends State<UpdateDialog> {
                     value: sliderValue,
                     min: 0.0,
                     max: widget.track['goal'].toDouble(),
-                    divisions: widget.track['goal'],
+                    divisions:
+                        widget.track['goal'] > 100 ? 20 : widget.track['goal'],
                     onChanged: (val) {
                       setState(
                         () {
