@@ -1,4 +1,7 @@
+import 'package:achievers_journal/models/user.dart';
+import 'package:achievers_journal/screens/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '/pages/onboarding_page1.dart';
 import '/pages/onboarding_page2.dart';
 import '/pages/onboarding_page3.dart';
@@ -48,7 +51,19 @@ class OnboardingScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<User>(context, listen: false)
+                            .signInWithGoogle()
+                            .then(
+                          (value) {
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (context) => const DashboardScreen(),
+                                ),
+                                (route) => false);
+                          },
+                        );
+                      },
                       child: FittedBox(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +89,13 @@ class OnboardingScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                              builder: (context) => const DashboardScreen(),
+                            ),
+                            (route) => false);
+                      },
                       child: const FittedBox(
                         child: Text(
                           'Continue without Login',

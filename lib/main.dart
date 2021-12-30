@@ -1,3 +1,5 @@
+import 'package:achievers_journal/models/user.dart';
+import 'package:achievers_journal/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -20,15 +22,20 @@ class AJApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-      create: (context) => Database(),
+    return MultiProvider(
+      providers: [
+        Provider(create: (context) => Database()),
+        Provider(create: (context) => User()),
+      ],
       builder: (context, child) {
         return MaterialApp(
           theme: lightTheme,
           darkTheme: darkTheme,
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
-          home: const OnboardingScreen(),
+          home: Provider.of<User>(context, listen: false).isSignedIn()
+              ? const DashboardScreen()
+              : const OnboardingScreen(),
         );
       },
     );
