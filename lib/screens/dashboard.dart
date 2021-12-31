@@ -12,6 +12,7 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Database database = Provider.of<Database>(context, listen: false);
     return Scaffold(
       appBar: AppBar(),
       drawer: Drawer(
@@ -46,13 +47,12 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: Center(
         child: FutureBuilder<bool>(
-          future: Provider.of<Database>(context, listen: false).isLoggedIn,
+          future: database.isLoggedIn,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data!) {
                 return StreamBuilder<DatabaseEvent>(
-                  stream: Provider.of<Database>(context, listen: false).data
-                      as Stream<DatabaseEvent>,
+                  stream: database.fireData,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView(
@@ -66,18 +66,40 @@ class DashboardScreen extends StatelessWidget {
                       );
                     } else {
                       return const CircularProgressIndicator(
-                        color: Colors.red,
+                        color: Colors.brown,
                       );
                     }
                   },
                 );
               } else {
-                return FutureBuilder<Map<String, dynamic>>(
-                  future:
-                      Provider.of<Database>(context, listen: false).localData(),
+                return FutureBuilder(
+                  future: database.loadFile,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return Text(snapshot.data!.toString());
+                      return StreamBuilder(
+                        stream: database.getModifyEvents(),
+                        builder: (context, snapshot) {
+                          return FutureBuilder<Map<String, dynamic>>(
+                            future: database.readFile(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return ListView(
+                                  padding: const EdgeInsets.only(
+                                    top: 50,
+                                    left: 20,
+                                    right: 20,
+                                  ),
+                                  children: getProgressBars(snapshot.data!),
+                                );
+                              } else {
+                                return const CircularProgressIndicator(
+                                  color: Colors.pink,
+                                );
+                              }
+                            },
+                          );
+                        },
+                      );
                     } else {
                       return const CircularProgressIndicator(
                         color: Colors.green,
@@ -114,6 +136,10 @@ class DashboardScreen extends StatelessWidget {
   List<Widget> getProgressBars(Map<dynamic, dynamic> data) {
     List<Widget> bars = [];
     int i = 0;
+    if (data['goals'].isEmpty || data['goals'] == null) {
+      bars.add(const Text('No Goals yet!'));
+      return bars;
+    }
     for (Map<dynamic, dynamic> goal in data['goals']) {
       bars.add(
         ProgressBar.fromGoal(
