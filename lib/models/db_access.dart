@@ -120,10 +120,16 @@ class Database {
   }
 
   /// Takes `position` and `newValue` and updates the reminder time.
-  void updateReminderTime(int position, String? newValue) {
-    _firebaseInstance!
-        .ref('/userId/goals/$position/reminderTime/')
-        .set(newValue);
+  void updateReminderTime(int position, String? newValue) async {
+    if (await isLoggedIn) {
+      _firebaseInstance!
+          .ref('/userId/goals/$position/reminderTime/')
+          .set(newValue);
+    } else {
+      Map<String, dynamic> data = await readFile();
+      data['goals'].elementAt(position)['reminderTime'] = newValue;
+      writeToFile(jsonEncode(data));
+    }
   }
 
   /// Takes `hour` in **24 hours**, `minutes`,`notificationId`,

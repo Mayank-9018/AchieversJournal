@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class Goal {
-  final int id;
+  final int id; //TODO: Generate unique id for each goal
   String name;
   String? description;
   int? icon;
