@@ -52,11 +52,12 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
             return StreamBuilder<DatabaseEvent>(
               stream: database.getGoalDetails(widget.position),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
                   _goal = Goal.fromMap(
                       snapshot.data!.snapshot.value as Map, widget.position);
                 }
-                return insideContent(snapshot.hasData);
+                return insideContent(
+                    snapshot.hasData && snapshot.data!.snapshot.value != null);
               },
             );
           } else {
@@ -67,11 +68,14 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
                   future: database.readFile(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      _goal = Goal.fromMap(
-                          snapshot.data!['goals'].elementAt(widget.position),
-                          widget.position);
+                      if (!snapshot.data!['goals'].isEmpty) {
+                        _goal = Goal.fromMap(
+                            snapshot.data!['goals'].elementAt(widget.position),
+                            widget.position);
+                      }
                     }
-                    return insideContent(snapshot.hasData);
+                    return insideContent(
+                        (snapshot.hasData && !snapshot.data!['goals'].isEmpty));
                   },
                 );
               },
@@ -92,7 +96,65 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
               onPressed: _showTimePickerDialog,
               icon: const Icon(Icons.alarm),
               tooltip: 'Add a reminder',
-            )
+            ),
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Confirm goal delete'),
+                    content: RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.bodyText2,
+                        children: [
+                          const TextSpan(text: 'Confirm delete goal - '),
+                          TextSpan(
+                            text: _goal.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      OutlinedButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 15,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 15,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Provider.of<Database>(context, listen: false)
+                              .deleteGoal(widget.position);
+                        },
+                        child: const Text('Confirm'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.delete_outline),
+            ),
           ],
         ),
         body: hasData
