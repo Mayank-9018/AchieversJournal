@@ -71,6 +71,10 @@ class Database {
     return jsonDecode(data);
   }
 
+  void writeToFile(String data) {
+    _file.writeAsString(data);
+  }
+
   /// Gets the localPath; Used to get the directory
   /// where to read and store the data from
   Future<String> get _localPath async {
@@ -79,15 +83,29 @@ class Database {
   }
 
   /// Takes `position` in the goals list and a `newValue` to update to.
-  void updateAchieved(int position, int newValue) {
-    _firebaseInstance!
-        .ref('/userId/goals/$position/history/0/achieved/')
-        .set(newValue);
+  void updateAchieved(int position, int newValue) async {
+    if (await isLoggedIn) {
+      _firebaseInstance!
+          .ref('/userId/goals/$position/history/0/achieved/')
+          .set(newValue);
+    } else {
+      Map<String, dynamic> data = await readFile();
+      data['goals'].elementAt(position)['history'].elementAt(0)['achieved'] =
+          newValue;
+      writeToFile(jsonEncode(data));
+    }
   }
 
-  /// Takes `position` in the goals list and `history` and competely updates the entire history of the goal.
-  void updateHistory(int position, List<dynamic> history) {
-    _firebaseInstance!.ref('/userId/goals/$position/history/').set(history);
+  /// Takes `position` in the goals list and `history` and completely updates
+  /// the entire history of the goal.
+  void updateHistory(int position, List<dynamic> history) async {
+    if (await isLoggedIn) {
+      _firebaseInstance!.ref('/userId/goals/$position/history/').set(history);
+    } else {
+      Map<String, dynamic> data = await readFile();
+      data['goals'].elementAt(position)['history'] = history;
+      writeToFile(jsonEncode(data));
+    }
   }
 
   /// Takes a Map `newGoal` with details of the new goal and inserts it into the
