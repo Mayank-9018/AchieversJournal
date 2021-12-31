@@ -62,7 +62,7 @@ class Database {
   /// Watches the file for changes and sends FileSystemEvents
   /// on changes to file.
   Stream<FileSystemEvent> getModifyEvents() {
-    return _file.watch();
+    return _file.watch(events: FileSystemEvent.modify);
   }
 
   /// Reads the file and returns `jsonDecoded` Map
