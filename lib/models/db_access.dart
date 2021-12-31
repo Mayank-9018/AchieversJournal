@@ -111,12 +111,18 @@ class Database {
   /// Takes a Map `newGoal` with details of the new goal and inserts it into the
   /// goals list as the end.
   void addNewGoal(Map<dynamic, dynamic> newGoal) async {
-    List<dynamic> goalsList;
-    goalsList = ((await _firebaseInstance!.ref('/userId/goals').get()).value)
-        as List<dynamic>;
-    goalsList = goalsList.toList();
-    goalsList.add(newGoal);
-    _firebaseInstance!.ref('/userId/goals/').set(goalsList);
+    if (await isLoggedIn) {
+      List<dynamic> goalsList;
+      goalsList = ((await _firebaseInstance!.ref('/userId/goals').get()).value)
+          as List<dynamic>;
+      goalsList = goalsList.toList();
+      goalsList.add(newGoal);
+      _firebaseInstance!.ref('/userId/goals/').set(goalsList);
+    } else {
+      Map<String, dynamic> data = await readFile();
+      data['goals'].add(newGoal);
+      writeToFile(jsonEncode(data));
+    }
   }
 
   /// Takes `position` and `newValue` and updates the reminder time.
