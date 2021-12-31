@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:achievers_journal/components/date_circle.dart';
 import 'package:achievers_journal/components/goal_card.dart';
 import 'package:achievers_journal/components/progress_bar.dart';
@@ -10,6 +11,7 @@ import 'package:provider/provider.dart';
 
 class GoalDetailScreen extends StatefulWidget {
   final int position;
+
   const GoalDetailScreen(this.position, {Key? key}) : super(key: key);
 
   @override
@@ -41,68 +43,100 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DatabaseEvent>(
-      stream: Provider.of<Database>(context).getGoalDetails(widget.position),
+    Database database = Provider.of<Database>(context, listen: false);
+    return FutureBuilder<bool>(
+      future: database.isLoggedIn,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          _goal = Goal.fromMap(
-              snapshot.data!.snapshot.value as Map, widget.position);
+          if (snapshot.data!) {
+            return StreamBuilder<DatabaseEvent>(
+              stream: database.getGoalDetails(widget.position),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  _goal = Goal.fromMap(
+                      snapshot.data!.snapshot.value as Map, widget.position);
+                }
+                return insideContent(snapshot.hasData);
+              },
+            );
+          } else {
+            return StreamBuilder<FileSystemEvent>(
+              stream: database.getModifyEvents(),
+              builder: (context, snapshot) {
+                return FutureBuilder<Map<String, dynamic>>(
+                  future: database.readFile(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      _goal = Goal.fromMap(
+                          snapshot.data!['goals'].elementAt(widget.position),
+                          widget.position);
+                    }
+                    return insideContent(snapshot.hasData);
+                  },
+                );
+              },
+            );
+          }
+        } else {
+          return insideContent(false);
         }
-        return Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                  onPressed: _showTimePickerDialog,
-                  icon: const Icon(Icons.alarm),
-                  tooltip: 'Add a reminder',
-                )
-              ],
-            ),
-            body: snapshot.hasData
-                ? Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      left: 10,
-                      right: 10,
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: GoalCard(_goal),
-                        ),
-                        const SizedBox(height: 20),
-                        Center(
-                          child: Text(
-                            'History',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline5!
-                                .copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.all(15.0),
-                            itemCount: _goal.history.isEmpty
-                                ? 0
-                                : _goal.history.length - 1,
-                            itemBuilder: (context, index) =>
-                                getHistoryBar(index + 1),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(
-                              height: 10,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : null);
       },
     );
+  }
+
+  Widget insideContent(bool hasData) {
+    return Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: _showTimePickerDialog,
+              icon: const Icon(Icons.alarm),
+              tooltip: 'Add a reminder',
+            )
+          ],
+        ),
+        body: hasData
+            ? Padding(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 10,
+                  right: 10,
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: GoalCard(_goal),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: Text(
+                        'History',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline5!
+                            .copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.all(15.0),
+                        itemCount: _goal.history.isEmpty
+                            ? 0
+                            : _goal.history.length - 1,
+                        itemBuilder: (context, index) =>
+                            getHistoryBar(index + 1),
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 10,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : null);
   }
 
   Widget getHistoryBar(int index) {
