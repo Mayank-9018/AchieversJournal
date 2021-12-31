@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Database {
   late Future<bool> isLoggedIn;
-  late dynamic data;
+  late Stream<DatabaseEvent> fireData;
   FirebaseDatabase? _firebaseInstance;
   late final Notifications notifications;
+  late final Future<File> loadFile;
+  late final File _file;
 
   Database() {
     isLoggedIn = getLoginStatus();
@@ -21,14 +23,28 @@ class Database {
   Future<bool> getLoginStatus() async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     bool status = _prefs.getBool('isLoggedIn') ?? false;
-    // TODO: Fix this
-    if (!status) {
-      data = rdbData();
+    if (status) {
+      fireData = rdbData();
     } else {
-      data = localData();
+      loadFile = _loadLocalFile();
     }
-    // TODO: and this
-    return !status;
+    return status;
+  }
+
+  Future<File> _loadLocalFile() async {
+    final path = await _localPath;
+    _file = File('$path/data.json');
+    if (!await _file.exists()) {
+      await _file.create();
+      _file.writeAsString(
+        jsonEncode(
+          <String, dynamic>{
+            "goals": [],
+          },
+        ),
+      );
+    }
+    return _file;
   }
 
   /// Returns a `Stream` of type `DatabaseEvent` from the firebase
@@ -36,24 +52,23 @@ class Database {
   Stream<DatabaseEvent> rdbData() {
     _firebaseInstance = FirebaseDatabase.instance;
     _firebaseInstance!.setPersistenceEnabled(true);
-    return _firebaseInstance!.ref('/userId').onValue;
+    return _firebaseInstance!.ref('/userId/').onValue;
   }
 
   Stream<DatabaseEvent> getGoalDetails(int position) {
     return _firebaseInstance!.ref('/userId/goals/$position/').onValue;
   }
 
-  /// Returns a `Future` of Map already jsonDecoded
-  /// from the the local data
-  Future<Map<String, dynamic>> localData() async {
-    final path = await _localPath;
-    File _localFile = File('$path/data.json');
-    if (await _localFile.exists()) {
-      return jsonDecode(_localFile.readAsStringSync());
-    } else {
-      _localFile.create();
-      return {};
-    }
+  /// Watches the file for changes and sends FileSystemEvents
+  /// on changes to file.
+  Stream<FileSystemEvent> getModifyEvents() {
+    return _file.watch();
+  }
+
+  /// Reads the file and returns `jsonDecoded` Map
+  Future<Map<String, dynamic>> readFile() async {
+    String data = await _file.readAsString();
+    return jsonDecode(data);
   }
 
   /// Gets the localPath; Used to get the directory
