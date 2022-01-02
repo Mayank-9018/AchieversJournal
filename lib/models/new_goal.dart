@@ -1,4 +1,5 @@
 class NewGoal {
+  late int id;
   String? title;
   String? description;
   int? iconData;
@@ -6,13 +7,15 @@ class NewGoal {
   String? unit;
   int currentGoal = 0;
 
+  NewGoal() : id = DateTime.now().millisecondsSinceEpoch;
+
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       "name": title,
       "description": description,
       "icon": iconData,
       "currentGoal": currentGoal,
-      "id": 069,
+      "id": id,
       "isTimeBased": isTimeBased,
       "unit": unit,
     };
