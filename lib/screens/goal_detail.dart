@@ -45,7 +45,7 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
   Widget build(BuildContext context) {
     Database database = Provider.of<Database>(context, listen: false);
     return FutureBuilder<bool>(
-      future: database.isLoggedIn,
+      future: database.usingGoogleSignIn,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!) {

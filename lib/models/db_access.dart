@@ -6,28 +6,36 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Database {
-  late Future<bool> isLoggedIn;
+  late Future<bool> usingGoogleSignIn;
   late Stream<DatabaseEvent> fireData;
   FirebaseDatabase? _firebaseInstance;
   late final Notifications notifications;
   late final Future<File> loadFile;
   late final File _file;
+  late final SharedPreferences _prefs;
 
   Database() {
-    isLoggedIn = getLoginStatus();
+    usingGoogleSignIn = getSignInStatus();
     notifications = Notifications();
   }
 
   /// Reads the `SharedPreferences` to check if the user is logged in/syncing data;
   /// Returns type `bool`
-  Future<bool> getLoginStatus() async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
+  Future<bool> getSignInStatus() async {
+    _prefs = await SharedPreferences.getInstance();
     bool status = _prefs.getBool('isLoggedIn') ?? false;
     if (status) {
       fireData = rdbData();
     } else {
       loadFile = _loadLocalFile();
     }
+    return status;
+  }
+
+  /// Reads the `SharedPreferences` to check if the user(local)
+  /// had completed onboarding or not.
+  bool hasCompletedOnboarding() {
+    bool status = _prefs.getBool('hasCompletedOnboarding') ?? false;
     return status;
   }
 
@@ -84,7 +92,7 @@ class Database {
 
   /// Takes `position` in the goals list and a `newValue` to update to.
   void updateAchieved(int position, int newValue) async {
-    if (await isLoggedIn) {
+    if (await usingGoogleSignIn) {
       _firebaseInstance!
           .ref('/userId/goals/$position/history/0/achieved/')
           .set(newValue);
@@ -99,7 +107,7 @@ class Database {
   /// Takes `position` in the goals list and `history` and completely updates
   /// the entire history of the goal.
   void updateHistory(int position, List<dynamic> history) async {
-    if (await isLoggedIn) {
+    if (await usingGoogleSignIn) {
       _firebaseInstance!.ref('/userId/goals/$position/history/').set(history);
     } else {
       Map<String, dynamic> data = await readFile();
@@ -111,7 +119,7 @@ class Database {
   /// Takes a Map `newGoal` with details of the new goal and inserts it into the
   /// goals list as the end.
   void addNewGoal(Map<dynamic, dynamic> newGoal) async {
-    if (await isLoggedIn) {
+    if (await usingGoogleSignIn) {
       List<dynamic> goalsList;
       goalsList = ((await _firebaseInstance!.ref('/userId/goals').get()).value)
           as List<dynamic>;
@@ -128,14 +136,14 @@ class Database {
   /// Takes an integer `position` and removes the goal at that position
   /// from the goals list.
   void deleteGoal(int position) async {
-    if(await isLoggedIn) {
+    if (await usingGoogleSignIn) {
       List<dynamic> goalsList =
-      ((await _firebaseInstance!.ref('/userId/goals/').get()).value)
-      as List<dynamic>;
+          ((await _firebaseInstance!.ref('/userId/goals/').get()).value)
+              as List<dynamic>;
       goalsList = goalsList.toList();
       goalsList.removeAt(position);
       _firebaseInstance!.ref('/userId/goals/').set(goalsList);
-    }else{
+    } else {
       Map<String, dynamic> data = await readFile();
       data['goals'].removeAt(position);
       writeToFile(jsonEncode(data));
@@ -144,7 +152,7 @@ class Database {
 
   /// Takes `position` and `newValue` and updates the reminder time.
   void updateReminderTime(int position, String? newValue) async {
-    if (await isLoggedIn) {
+    if (await usingGoogleSignIn) {
       _firebaseInstance!
           .ref('/userId/goals/$position/reminderTime/')
           .set(newValue);

@@ -47,7 +47,7 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: Center(
         child: FutureBuilder<bool>(
-          future: database.isLoggedIn,
+          future: database.usingGoogleSignIn,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data!) {
