@@ -1,3 +1,4 @@
+import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/user.dart';
 import 'package:achievers_journal/screens/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,8 @@ class OnboardingScreen extends StatelessWidget {
                                   builder: (context) => const DashboardScreen(),
                                 ),
                                 (route) => false);
+                            Provider.of<Database>(context, listen: false)
+                                .updateSignInStatus(true);
                           },
                         );
                       },
@@ -95,6 +98,8 @@ class OnboardingScreen extends StatelessWidget {
                               builder: (context) => const DashboardScreen(),
                             ),
                             (route) => false);
+                        Provider.of<Database>(context, listen: false)
+                            .updateCompletedOnboardingStatus(true);
                       },
                       child: const FittedBox(
                         child: Text(

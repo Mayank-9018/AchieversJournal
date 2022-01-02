@@ -23,7 +23,7 @@ class Database {
   /// Returns type `bool`
   Future<bool> getSignInStatus() async {
     _prefs = await SharedPreferences.getInstance();
-    bool status = _prefs.getBool('isLoggedIn') ?? false;
+    bool status = _prefs.getBool('usingGoogleSignIn') ?? false;
     if (status) {
       fireData = rdbData();
     } else {
@@ -37,6 +37,18 @@ class Database {
   bool hasCompletedOnboarding() {
     bool status = _prefs.getBool('hasCompletedOnboarding') ?? false;
     return status;
+  }
+
+  /// Takes `bool` `status` and updates SharedPreference key-**usingGoogleSignIn**
+  /// with the the `status` value.
+  void updateSignInStatus(bool status) {
+    _prefs.setBool('usingGoogleSignIn', status);
+  }
+
+  /// Takes `bool` `status` and updates SharedPreference key-**hasCompletedOnboarding**
+  /// with the the `status` value.
+  void updateCompletedOnboardingStatus(bool status) {
+    _prefs.setBool('hasCompletedOnboarding', status);
   }
 
   Future<File> _loadLocalFile() async {
