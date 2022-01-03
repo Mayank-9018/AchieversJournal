@@ -52,7 +52,7 @@ class DashboardScreen extends StatelessWidget {
             if (snapshot.hasData) {
               if (snapshot.data!) {
                 return StreamBuilder<DatabaseEvent>(
-                  stream: database.fireData,
+                  stream: database.rdbData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView(

@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Database {
   late bool usingGoogleSignIn;
-  late Stream<DatabaseEvent> fireData;
   FirebaseDatabase? _firebaseInstance;
   late final Notifications notifications;
   late final Future<File> loadFile;
@@ -29,9 +28,7 @@ class Database {
   Future<bool> getSignInStatus() async {
     _prefs = await SharedPreferences.getInstance();
     bool status = _prefs.getBool('usingGoogleSignIn') ?? false;
-    if (status) {
-      fireData = rdbData();
-    } else {
+    if (!status) {
       loadFile = _loadLocalFile();
     }
     usingGoogleSignIn = status;
