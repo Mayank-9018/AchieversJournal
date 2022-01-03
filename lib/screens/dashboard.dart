@@ -47,7 +47,7 @@ class DashboardScreen extends StatelessWidget {
       ),
       body: Center(
         child: FutureBuilder<bool>(
-          future: database.usingGoogleSignIn,
+          future: database.getSignInStatus(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data!) {
@@ -61,8 +61,10 @@ class DashboardScreen extends StatelessWidget {
                           left: 20,
                           right: 20,
                         ),
-                        children: getProgressBars(snapshot.data!.snapshot.value
-                            as Map<dynamic, dynamic>),
+                        children: getProgressBars(
+                            (snapshot.data!.snapshot.value ??
+                                    <dynamic, dynamic>{'goals': []})
+                                as Map<dynamic, dynamic>),
                       );
                     } else {
                       return const CircularProgressIndicator(

@@ -6,17 +6,22 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Database {
-  late Future<bool> usingGoogleSignIn;
+  late bool usingGoogleSignIn;
   late Stream<DatabaseEvent> fireData;
   FirebaseDatabase? _firebaseInstance;
   late final Notifications notifications;
   late final Future<File> loadFile;
   late final File _file;
-  late final SharedPreferences _prefs;
+  late SharedPreferences _prefs;
+  late String userUID;
 
   Database() {
-    usingGoogleSignIn = getSignInStatus();
     notifications = Notifications();
+  }
+
+  /// Updates the userUID after successful sign-in.
+  void updateUserUID(String uid) {
+    userUID = uid;
   }
 
   /// Reads the `SharedPreferences` to check if the user is logged in/syncing data;
@@ -29,6 +34,7 @@ class Database {
     } else {
       loadFile = _loadLocalFile();
     }
+    usingGoogleSignIn = status;
     return status;
   }
 
@@ -72,11 +78,11 @@ class Database {
   Stream<DatabaseEvent> rdbData() {
     _firebaseInstance = FirebaseDatabase.instance;
     _firebaseInstance!.setPersistenceEnabled(true);
-    return _firebaseInstance!.ref('/userId/').onValue;
+    return _firebaseInstance!.ref('/$userUID/').onValue;
   }
 
   Stream<DatabaseEvent> getGoalDetails(int position) {
-    return _firebaseInstance!.ref('/userId/goals/$position/').onValue;
+    return _firebaseInstance!.ref('/$userUID/goals/$position/').onValue;
   }
 
   /// Watches the file for changes and sends FileSystemEvents
@@ -104,9 +110,9 @@ class Database {
 
   /// Takes `position` in the goals list and a `newValue` to update to.
   void updateAchieved(int position, int newValue) async {
-    if (await usingGoogleSignIn) {
+    if (usingGoogleSignIn) {
       _firebaseInstance!
-          .ref('/userId/goals/$position/history/0/achieved/')
+          .ref('/$userUID/goals/$position/history/0/achieved/')
           .set(newValue);
     } else {
       Map<String, dynamic> data = await readFile();
@@ -119,8 +125,8 @@ class Database {
   /// Takes `position` in the goals list and `history` and completely updates
   /// the entire history of the goal.
   void updateHistory(int position, List<dynamic> history) async {
-    if (await usingGoogleSignIn) {
-      _firebaseInstance!.ref('/userId/goals/$position/history/').set(history);
+    if (usingGoogleSignIn) {
+      _firebaseInstance!.ref('/$userUID/goals/$position/history/').set(history);
     } else {
       Map<String, dynamic> data = await readFile();
       data['goals'].elementAt(position)['history'] = history;
@@ -131,13 +137,14 @@ class Database {
   /// Takes a Map `newGoal` with details of the new goal and inserts it into the
   /// goals list as the end.
   void addNewGoal(Map<dynamic, dynamic> newGoal) async {
-    if (await usingGoogleSignIn) {
+    if (usingGoogleSignIn) {
       List<dynamic> goalsList;
-      goalsList = ((await _firebaseInstance!.ref('/userId/goals').get()).value)
-          as List<dynamic>;
+      goalsList =
+          (((await _firebaseInstance!.ref('/$userUID/goals').get()).value) ??
+              []) as List<dynamic>;
       goalsList = goalsList.toList();
       goalsList.add(newGoal);
-      _firebaseInstance!.ref('/userId/goals/').set(goalsList);
+      _firebaseInstance!.ref('/$userUID/goals/').set(goalsList);
     } else {
       Map<String, dynamic> data = await readFile();
       data['goals'].add(newGoal);
@@ -148,13 +155,13 @@ class Database {
   /// Takes an integer `position` and removes the goal at that position
   /// from the goals list.
   void deleteGoal(int position) async {
-    if (await usingGoogleSignIn) {
+    if (usingGoogleSignIn) {
       List<dynamic> goalsList =
-          ((await _firebaseInstance!.ref('/userId/goals/').get()).value)
+          ((await _firebaseInstance!.ref('/$userUID/goals/').get()).value)
               as List<dynamic>;
       goalsList = goalsList.toList();
       goalsList.removeAt(position);
-      _firebaseInstance!.ref('/userId/goals/').set(goalsList);
+      _firebaseInstance!.ref('/$userUID/goals/').set(goalsList);
     } else {
       Map<String, dynamic> data = await readFile();
       data['goals'].removeAt(position);
@@ -164,9 +171,9 @@ class Database {
 
   /// Takes `position` and `newValue` and updates the reminder time.
   void updateReminderTime(int position, String? newValue) async {
-    if (await usingGoogleSignIn) {
+    if (usingGoogleSignIn) {
       _firebaseInstance!
-          .ref('/userId/goals/$position/reminderTime/')
+          .ref('/$userUID/goals/$position/reminderTime/')
           .set(newValue);
     } else {
       Map<String, dynamic> data = await readFile();

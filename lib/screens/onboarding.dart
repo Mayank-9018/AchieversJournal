@@ -63,7 +63,8 @@ class OnboardingScreen extends StatelessWidget {
                                 ),
                                 (route) => false);
                             Provider.of<Database>(context, listen: false)
-                                .updateSignInStatus(true);
+                              ..updateUserUID(value.user!.uid)
+                              ..updateSignInStatus(true);
                           },
                         );
                       },

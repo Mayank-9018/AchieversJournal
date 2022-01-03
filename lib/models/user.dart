@@ -21,4 +21,6 @@ class User {
   bool isSignedIn() {
     return _auth.currentUser != null;
   }
+
+  String get userId => _auth.currentUser!.uid;
 }

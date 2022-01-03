@@ -34,17 +34,21 @@ class AJApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           themeMode: ThemeMode.light,
           home: FutureBuilder<bool>(
-            future: Provider.of<Database>(context).usingGoogleSignIn,
+            future: Provider.of<Database>(context).getSignInStatus(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                User user = Provider.of<User>(context, listen: false);
+                Database database =
+                    Provider.of<Database>(context, listen: false);
                 if (snapshot.data!) {
-                  if (Provider.of<User>(context, listen: false).isSignedIn()) {
+                  if (user.isSignedIn()) {
+                    database.updateUserUID(user.userId);
                     return const DashboardScreen();
                   } else {
                     return const OnboardingScreen();
                   }
                 } else {
-                  if (Provider.of<Database>(context).hasCompletedOnboarding()) {
+                  if (database.hasCompletedOnboarding()) {
                     return const DashboardScreen();
                   } else {
                     return const OnboardingScreen();
