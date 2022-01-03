@@ -55,17 +55,22 @@ class DashboardScreen extends StatelessWidget {
                   stream: database.rdbData(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return ListView(
-                        padding: const EdgeInsets.only(
-                          top: 50,
-                          left: 20,
-                          right: 20,
-                        ),
-                        children: getProgressBars(
-                            (snapshot.data!.snapshot.value ??
-                                    <dynamic, dynamic>{'goals': []})
-                                as Map<dynamic, dynamic>),
-                      );
+                      if (snapshot.data!.snapshot.value == null ||
+                          (snapshot.data!.snapshot.value
+                                  as Map<dynamic, dynamic>)['goals']
+                              .isEmpty) {
+                        return getEmpty(context);
+                      } else {
+                        return ListView(
+                          padding: const EdgeInsets.only(
+                            top: 50,
+                            left: 20,
+                            right: 20,
+                          ),
+                          children: getProgressBars(snapshot
+                              .data!.snapshot.value as Map<dynamic, dynamic>),
+                        );
+                      }
                     } else {
                       return const CircularProgressIndicator(
                         color: Colors.brown,
@@ -85,14 +90,18 @@ class DashboardScreen extends StatelessWidget {
                             future: database.readFile(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                return ListView(
-                                  padding: const EdgeInsets.only(
-                                    top: 50,
-                                    left: 20,
-                                    right: 20,
-                                  ),
-                                  children: getProgressBars(snapshot.data!),
-                                );
+                                if (snapshot.data!['goals'].isEmpty) {
+                                  return getEmpty(context);
+                                } else {
+                                  return ListView(
+                                    padding: const EdgeInsets.only(
+                                      top: 50,
+                                      left: 20,
+                                      right: 20,
+                                    ),
+                                    children: getProgressBars(snapshot.data!),
+                                  );
+                                }
                               } else {
                                 return const CircularProgressIndicator(
                                   color: Colors.pink,
@@ -135,13 +144,34 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  Widget getEmpty(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset(
+          'assets/mountain.png',
+          height: 150,
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        Text(
+          'No Goals yet',
+          style:
+              Theme.of(context).textTheme.headline6!.copyWith(fontSize: 24.0),
+        ),
+        const SizedBox(
+          height: 50,
+        ),
+      ],
+    );
+  }
+
   List<Widget> getProgressBars(Map<dynamic, dynamic> data) {
     List<Widget> bars = [];
     int i = 0;
-    if (data['goals'].isEmpty || data['goals'] == null) {
-      bars.add(const Text('No Goals yet!'));
-      return bars;
-    }
+
     for (Map<dynamic, dynamic> goal in data['goals']) {
       bars.add(
         ProgressBar.fromGoal(

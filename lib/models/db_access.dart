@@ -11,6 +11,7 @@ class Database {
   late final Notifications notifications;
   late final Future<File> loadFile;
   late final File _file;
+  bool fileLoaded = false;
   late SharedPreferences _prefs;
   late String userUID;
 
@@ -28,7 +29,7 @@ class Database {
   Future<bool> getSignInStatus() async {
     _prefs = await SharedPreferences.getInstance();
     bool status = _prefs.getBool('usingGoogleSignIn') ?? false;
-    if (!status) {
+    if (!status && fileLoaded == false) {
       loadFile = _loadLocalFile();
     }
     usingGoogleSignIn = status;
@@ -55,6 +56,7 @@ class Database {
   }
 
   Future<File> _loadLocalFile() async {
+    fileLoaded = true;
     final path = await _localPath;
     _file = File('$path/data.json');
     if (!await _file.exists()) {
