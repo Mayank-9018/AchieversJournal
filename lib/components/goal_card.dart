@@ -79,7 +79,7 @@ class _GoalCardState extends State<GoalCard>
                   child: OutlinedButton(
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 40),
+                        const EdgeInsets.symmetric(horizontal: 35),
                       ),
                     ),
                     onPressed: () {
@@ -109,31 +109,40 @@ class _GoalCardState extends State<GoalCard>
               ],
             ),
           ),
-          AnimatedBuilder(
-            child: Text(
-              (percentage * 100).round().toString() + '%',
-              style: Theme.of(context).textTheme.headline5,
+          ConstrainedBox(
+            constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width / 2 - 35),
+            child: LayoutBuilder(
+              builder: (context, constraints) => AnimatedBuilder(
+                child: Text(
+                  (percentage * 100).round().toString() + '%',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                animation: animation,
+                builder: (context, child) => Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                        height: constraints.maxWidth,
+                        width: constraints.maxWidth,
+                        child: CustomPaint(
+                          painter: CustomCPI(
+                              animation.value,
+                              Theme.of(context).brightness == Brightness.light
+                                  ? Colors.black
+                                  : Colors.grey.shade700,
+                              percentage >= 0.7
+                                  ? Colors.green
+                                  : percentage > 0.3
+                                      ? Colors.amber
+                                      : Colors.red),
+                        )),
+                    child!,
+                  ],
+                ),
+              ),
             ),
-            animation: animation,
-            builder: (context, child) => Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                    height: 150,
-                    width: 150,
-                    child: CustomPaint(
-                      painter: CustomCPI(
-                          animation.value,
-                          percentage >= 0.7
-                              ? Colors.green
-                              : percentage > 0.3
-                                  ? Colors.amber
-                                  : Colors.red),
-                    )),
-                child!,
-              ],
-            ),
-          )
+          ),
         ],
       ),
     );
