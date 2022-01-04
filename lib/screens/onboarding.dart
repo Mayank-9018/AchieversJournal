@@ -24,18 +24,8 @@ class OnboardingScreen extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          SizedBox(
             height: 75,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0, -2),
-                    blurRadius: 10.0,
-                    spreadRadius: 1),
-              ],
-            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

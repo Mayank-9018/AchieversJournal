@@ -2,21 +2,16 @@ import 'package:flutter/material.dart';
 
 ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
-  colorScheme: ColorScheme(
-      primary: Colors.white,
-      primaryVariant: Colors.grey.shade300,
-      secondary: Colors.blue.shade100,
-      secondaryVariant: Colors.blue.shade900,
-      surface: Colors.white,
-      background: Colors.white,
-      error: Colors.red,
-      onPrimary: Colors.black,
-      onSecondary: Colors.black,
-      onSurface: Colors.black,
-      onBackground: Colors.black,
-      onError: Colors.green,
-      brightness: Brightness.light),
-  appBarTheme: const AppBarTheme(elevation: 0.0),
+  appBarTheme: const AppBarTheme(
+    elevation: 0.0,
+    backgroundColor: Colors.white,
+    foregroundColor: Colors.black,
+  ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Colors.lightBlue.shade100,
+    splashColor: Colors.lightBlue.shade200,
+    foregroundColor: Colors.black,
+  ),
   textButtonTheme: TextButtonThemeData(
     style: ButtonStyle(
       textStyle: MaterialStateProperty.all(
@@ -137,5 +132,15 @@ ThemeData lightTheme = ThemeData(
     entryModeIconColor: Colors.black,
     dialBackgroundColor: Colors.white,
     hourMinuteTextColor: Colors.black,
+  ),
+  textTheme: const TextTheme(
+    headline1: TextStyle(color: Color(0xff444444)),
+    headline2: TextStyle(color: Color(0xff444444)),
+    headline3: TextStyle(color: Color(0xff444444)),
+    headline4: TextStyle(color: Color(0xff444444)),
+    headline5: TextStyle(color: Color(0xff444444)),
+    headline6: TextStyle(color: Color(0xff444444)),
+    bodyText1: TextStyle(fontSize: 18.0, color: Colors.black),
+    bodyText2: TextStyle(color: Colors.black),
   ),
 );

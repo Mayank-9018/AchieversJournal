@@ -63,20 +63,10 @@ class _NewGoalScreenState extends State<NewGoalScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: Container(
+        bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: 10.0,
             horizontal: 10.0,
-          ),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey,
-                  offset: Offset(0, -2),
-                  blurRadius: 10.0,
-                  spreadRadius: 1),
-            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,

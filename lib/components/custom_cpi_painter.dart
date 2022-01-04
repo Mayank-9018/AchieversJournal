@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class CustomCPI extends CustomPainter {
   final double percentage;
+  final Color strokeColor;
   final Color color;
-  CustomCPI(this.percentage,this.color);
+  CustomCPI(this.percentage, this.strokeColor, this.color);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -17,7 +18,7 @@ class CustomCPI extends CustomPainter {
       ..strokeWidth = 10.0
       ..strokeCap = StrokeCap.round;
     final paint2 = Paint()
-      ..color = Colors.black
+      ..color = strokeColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2.0;
 

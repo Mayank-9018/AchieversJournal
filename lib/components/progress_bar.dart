@@ -77,7 +77,9 @@ class _ProgressBarState extends State<ProgressBar>
             Container(
               height: 70,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.white
+                    : Colors.grey.shade700,
                 border: Border.all(width: 1.5),
                 borderRadius: BorderRadius.circular(15.0),
               ),
@@ -125,6 +127,7 @@ class _ProgressBarState extends State<ProgressBar>
                         ),
                         Icon(
                           widget.icon,
+                          color: Colors.black,
                           size: 35,
                         ),
                         const SizedBox(
@@ -132,7 +135,7 @@ class _ProgressBarState extends State<ProgressBar>
                         ),
                         Text(
                           widget.goalName!,
-                          style: const TextStyle(fontSize: 18),
+                          style: Theme.of(context).textTheme.bodyText1,
                         )
                       ],
                     ),

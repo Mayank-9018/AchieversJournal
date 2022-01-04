@@ -53,7 +53,11 @@ class _GoalCardState extends State<GoalCard>
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
-        border: Border.all(),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.black
+              : Colors.white,
+        ),
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Row(

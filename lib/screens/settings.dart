@@ -8,13 +8,15 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             pinned: true,
             expandedHeight: 150.0,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
                 'Settings',
-                style: TextStyle(color: Colors.black),
+                style: Theme.of(context).brightness == Brightness.light
+                    ? const TextStyle(color: Colors.black)
+                    : null,
               ),
             ),
           ),

@@ -16,18 +16,33 @@ class OnboardingPage3 extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: ListView(
+            child: Column(
               children: [
                 Text(
                   'Reminders to keep you on track',
                   style: Theme.of(context).textTheme.headline3,
                 ),
                 const SizedBox(
-                  height: 25,
+                  height: 40,
                 ),
-                Image.asset(
-                  'assets/notif.jpg',
-                  height: 270,
+                Container(
+                  child: Image.asset(
+                    'assets/notif.png',
+                    height: 300,
+                  ),
+                  foregroundDecoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      stops: const [0.7, 1.0],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Theme.of(context).brightness == Brightness.light
+                            ? Colors.white
+                            : const Color(0xff303030)
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),

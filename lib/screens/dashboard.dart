@@ -18,14 +18,12 @@ class DashboardScreen extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           children: [
-            const Center(
+            Center(
               child: DrawerHeader(
-                padding: EdgeInsets.only(top: 75.0),
+                padding: const EdgeInsets.only(top: 75.0),
                 child: Text(
                   'Achievers Journal',
-                  style: TextStyle(
-                    fontSize: 24,
-                  ),
+                  style: Theme.of(context).textTheme.headline5!,
                 ),
               ),
             ),
@@ -132,7 +130,6 @@ class DashboardScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        splashColor: Colors.blue.shade300,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => const NewGoalScreen(),

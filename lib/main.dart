@@ -32,7 +32,7 @@ class AJApp extends StatelessWidget {
           theme: lightTheme,
           darkTheme: darkTheme,
           debugShowCheckedModeBanner: false,
-          themeMode: ThemeMode.light,
+          themeMode: ThemeMode.system,
           home: FutureBuilder<bool>(
             future: Provider.of<Database>(context).getSignInStatus(),
             builder: (context, snapshot) {

@@ -19,12 +19,47 @@ class OnboardingPage2 extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline3,
                 ),
                 const SizedBox(
-                  height: 50,
+                  height: 75,
                 ),
-                Image.asset(
-                  'assets/analytics.png',
-                  height: 250,
-                )
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Icon(
+                          Icons.trending_up,
+                          size: 100,
+                        ),
+                        Icon(
+                          Icons.insights,
+                          size: 100,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.bar_chart,
+                          size: 150,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Icon(
+                          Icons.trending_down,
+                          size: 100,
+                        ),
+                        Icon(
+                          Icons.data_usage,
+                          size: 75,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

@@ -88,8 +88,10 @@ class _NewGoalPage1State extends State<NewGoalPage1> {
   }
 
   void _pickIcon(BuildContext context) async {
-    IconData? icon = await FlutterIconPicker.showIconPicker(context,
-        iconPackModes: [IconPack.material]);
+    IconData? icon = await FlutterIconPicker.showIconPicker(
+      context,
+      iconPackModes: [IconPack.material],
+    );
     newGoal.iconData = icon?.codePoint;
     setState(() {});
   }
