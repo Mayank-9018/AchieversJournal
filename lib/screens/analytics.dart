@@ -1,3 +1,4 @@
+import 'package:achievers_journal/components/weekly_analysis.dart';
 import 'package:achievers_journal/models/db_access.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,10 @@ class AnalyticsScreen extends StatelessWidget {
             if (snapshot.hasData) {
               return Column(
                 children: [
+                  const WeeklyAnalysis([0.1, 0.23, 0.43, 0.9, 0.65, 1.0, 0.8]), //TODO: Replace with calculated data
+                  const SizedBox(
+                    height: 30,
+                  ),
                   Row(
                     children: [
                       StatCard(
