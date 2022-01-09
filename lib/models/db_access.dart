@@ -200,7 +200,28 @@ class Database {
     );
   }
 
+  /// Cancel notification with the assigned `goalId`
   void cancelNotification(int goalId) {
     notifications.cancelNotifications(goalId);
+  }
+
+  /// Get analytics data
+  /// avg_completion_rate -> `[int]` Average Goals Completion Rate
+  Future<Map<String, dynamic>> getAnalytics() async {
+    Map<String, dynamic> returnData = {};
+    List<Map<dynamic, dynamic>> data =
+        ((await _firebaseInstance!.ref('/$userUID/goals/').get()).value
+                as List<dynamic>)
+            .cast<Map<dynamic, dynamic>>();
+    double avg = 0.0;
+    for (Map<dynamic, dynamic> goal in data) {
+      double avgGoal = 0.0;
+      for (Map<dynamic, dynamic> history in goal['history']) {
+        avgGoal += history['achieved'] / history['goal'];
+      }
+      avg += (avgGoal / goal['history'].length);
+    }
+    returnData['avg_completion_rate'] = ((avg / data.length * 100).round());
+    return returnData;
   }
 }

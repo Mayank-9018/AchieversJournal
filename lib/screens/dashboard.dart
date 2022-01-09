@@ -6,6 +6,7 @@ import 'package:achievers_journal/screens/settings.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'analytics.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -26,6 +27,19 @@ class DashboardScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline5!,
                 ),
               ),
+            ),
+            ListTile(
+              minLeadingWidth: 30.0,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+              leading: const Icon(Icons.analytics_outlined),
+              title: const Text('Analytics'),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AnalyticsScreen(),
+                  ),
+                );
+              },
             ),
             ListTile(
               minLeadingWidth: 30.0,
