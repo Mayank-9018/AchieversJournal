@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class DateCircle extends StatelessWidget {
   final String dateString;
   final DateTime date;
+
   DateCircle(this.dateString, {Key? key})
       : date = DateTime.parse(dateString),
         super(key: key);
@@ -13,7 +14,7 @@ class DateCircle extends StatelessWidget {
       width: 50,
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.blue.shade100,
+        color: Theme.of(context).floatingActionButtonTheme.backgroundColor,
         borderRadius: BorderRadius.circular(25.0),
       ),
       child: Column(
