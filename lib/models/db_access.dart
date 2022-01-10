@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:achievers_journal/models/notifications.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class Database {
   late bool usingGoogleSignIn;
@@ -207,12 +209,19 @@ class Database {
 
   /// Get analytics data
   /// avg_completion_rate -> `[int]` Average Goals Completion Rate
+  /// weekly_data -> `[List<double>]` Percentage of Goals completely in the last 7 days
   Future<Map<String, dynamic>> getAnalytics() async {
     Map<String, dynamic> returnData = {};
     List<Map<dynamic, dynamic>> data =
         ((await _firebaseInstance!.ref('/$userUID/goals/').get()).value
                 as List<dynamic>)
             .cast<Map<dynamic, dynamic>>();
+    returnData['avg_completion_rate'] = _calculateAvgCompletionRate(data);
+    returnData['weekly_data'] = _getWeeklyData(data);
+    return returnData;
+  }
+
+  int _calculateAvgCompletionRate(List<Map<dynamic, dynamic>> data) {
     double avg = 0.0;
     for (Map<dynamic, dynamic> goal in data) {
       double avgGoal = 0.0;
@@ -221,7 +230,38 @@ class Database {
       }
       avg += (avgGoal / goal['history'].length);
     }
-    returnData['avg_completion_rate'] = ((avg / data.length * 100).round());
-    return returnData;
+    return (avg / data.length * 100).round();
+  }
+
+  List<double> _getWeeklyData(List<Map<dynamic, dynamic>> data) {
+    List<double> weeklyData = List.generate(7, (index) => 0.0);
+    List<String> dates = _getDates();
+    for (int j = 0; j < dates.length; j++) {
+      String date = dates.elementAt(j);
+      for (Map<dynamic, dynamic> goal in data) {
+        List<Map<dynamic, dynamic>> history =
+            goal['history'].cast<Map<dynamic, dynamic>>();
+        for (int i = 0; i < min(history.length, 7); i++) {
+          if (history.elementAt(i)['date'] == date) {
+            weeklyData[j] +=
+                history.elementAt(i)['achieved'] / history.elementAt(i)['goal'];
+          }
+        }
+      }
+      weeklyData[j] /= data.length;
+      weeklyData[j] = double.parse(weeklyData[j].toStringAsFixed(2));
+    }
+    return weeklyData;
+  }
+
+  List<String> _getDates() {
+    List<String> dates = [];
+    DateTime today = DateTime.now();
+    DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+    for (int i = 6; i >= 0; i--) {
+      DateTime newDate = today.subtract(Duration(days: i));
+      dates.add(dateFormat.format(newDate));
+    }
+    return dates;
   }
 }

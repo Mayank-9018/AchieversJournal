@@ -13,51 +13,49 @@ class AnalyticsScreen extends StatelessWidget {
         title: const Text('Analytics'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 15.0,
-          horizontal: 20.0,
-        ),
-        child: FutureBuilder<Map<String, dynamic>>(
-          future: Provider.of<Database>(context).getAnalytics(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                children: [
-                  const WeeklyAnalysis([0.1, 0.23, 0.43, 0.9, 0.65, 1.0, 0.8]), //TODO: Replace with calculated data
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      StatCard(
-                        Column(
-                          children: [
-                            Text(
-                              'Average Goals Completion Rate',
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              snapshot.data!['avg_completion_rate'].toString() +
-                                  "%",
-                              style: Theme.of(context).textTheme.headline2,
-                            )
-                            // Text()
-                          ],
-                        ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: Provider.of<Database>(context).getAnalytics(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              padding: const EdgeInsets.symmetric(
+                vertical: 15.0,
+                horizontal: 20.0,
+              ),
+              children: [
+                WeeklyAnalysis(snapshot.data!['weekly_data']),
+                const SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: [
+                    StatCard(
+                      Column(
+                        children: [
+                          Text(
+                            'Average Goals Completion Rate',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            snapshot.data!['avg_completion_rate'].toString() +
+                                "%",
+                            style: Theme.of(context).textTheme.headline2,
+                          )
+                          // Text()
+                        ],
                       ),
-                    ],
-                  )
-                ],
-              );
-            } else {
-              return Container();
-            }
-          },
-        ),
+                    ),
+                  ],
+                )
+              ],
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

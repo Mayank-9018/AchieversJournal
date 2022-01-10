@@ -8,8 +8,7 @@ class WeeklyAnalysis extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+      height: 230,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
         color: Theme.of(context).cardColor,
@@ -17,10 +16,35 @@ class WeeklyAnalysis extends StatelessWidget {
           BoxShadow(color: Colors.grey, blurRadius: 10.0, spreadRadius: 0.0)
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: _getBars(),
+      child: Stack(
+        children: [
+          Positioned(
+            left: 20.0,
+            top: 20.0,
+            child: Text(
+              'Weekly Analysis',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline6!
+                  .copyWith(fontSize: 22.0),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 40.0,
+                right: 40.0,
+                bottom: 15.0,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: _getBars(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -30,20 +54,38 @@ class WeeklyAnalysis extends StatelessWidget {
     for (double val in values) {
       bars.add(
         TweenAnimationBuilder<double>(
-          tween: Tween<double>(begin: 0.0, end: val),
-          duration: const Duration(seconds: 1),
-          curve: Curves.easeOutBack,
-          builder: (context, value, child) => Container(
+          child: Container(
             width: 10,
-            height: 150 * value,
+            height: 150,
             decoration: BoxDecoration(
-              color: val >= 0.7
-                  ? Colors.green
-                  : val > 0.3
-                      ? Colors.amber
-                      : Colors.red,
+              color: Colors.lightBlue.shade50,
               borderRadius: BorderRadius.circular(20.0),
             ),
+          ),
+          tween: Tween<double>(begin: 0.0, end: val),
+          duration: const Duration(seconds: 1),
+          curve: const Interval(
+            0.20,
+            1.0,
+            curve: Curves.easeOutBack,
+          ),
+          builder: (context, value, child) => Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              child!,
+              Container(
+                width: 10,
+                height: 150 * value,
+                decoration: BoxDecoration(
+                  color: val >= 0.7
+                      ? Colors.green
+                      : val > 0.3
+                          ? Colors.amber
+                          : Colors.red,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+            ],
           ),
         ),
       );
