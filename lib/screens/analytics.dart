@@ -37,7 +37,7 @@ class AnalyticsScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 15,
                           ),
                           Text(
                             snapshot.data!['avg_completion_rate'].toString() +
