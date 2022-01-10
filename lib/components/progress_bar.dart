@@ -9,6 +9,7 @@ class ProgressBar extends StatefulWidget {
   final int maxGoal;
   final Goal? goal;
   final bool isHistory;
+
   const ProgressBar(this.icon, this.goalName, this.progress, this.maxGoal,
       {Key? key, this.goal})
       : isHistory = false,
@@ -38,6 +39,8 @@ class ProgressBar extends StatefulWidget {
 class _ProgressBarState extends State<ProgressBar>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
+  final _scaleTween = Tween(begin: 1.0, end: 0.95);
+
   @override
   void initState() {
     super.initState();
@@ -56,10 +59,16 @@ class _ProgressBarState extends State<ProgressBar>
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      scale: Tween(begin: 1.0, end: 0.95).animate(
+      scale: _scaleTween.animate(
         CurvedAnimation(parent: _animationController, curve: Curves.linear),
       ),
       child: GestureDetector(
+        onTapDown: (_) {
+          _animationController.forward();
+        },
+        onTapCancel: () {
+          _animationController.reverse();
+        },
         onTap: () async {
           await _animationController.forward();
           if (widget.goal != null) {
