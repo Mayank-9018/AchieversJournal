@@ -60,7 +60,7 @@ class AnalyticsScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.auto_graph_outlined,
                     size: 150,
                   ),
@@ -98,8 +98,14 @@ class StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
         color: Theme.of(context).cardColor,
-        boxShadow: const [
-          BoxShadow(color: Colors.grey, blurRadius: 10.0, spreadRadius: 0.0)
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey.shade300
+                : Colors.grey.shade800,
+            blurRadius: 15.0,
+            spreadRadius: 2.0,
+          ),
         ],
       ),
       child: child,

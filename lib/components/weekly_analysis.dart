@@ -12,8 +12,14 @@ class WeeklyAnalysis extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
         color: Theme.of(context).cardColor,
-        boxShadow: const [
-          BoxShadow(color: Colors.grey, blurRadius: 10.0, spreadRadius: 0.0)
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.grey.shade300
+                : Colors.grey.shade800,
+            blurRadius: 15.0,
+            spreadRadius: 2.0,
+          ),
         ],
       ),
       child: Stack(
@@ -40,7 +46,7 @@ class WeeklyAnalysis extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: _getBars(),
+                children: _getBars(context),
               ),
             ),
           ),
@@ -49,7 +55,7 @@ class WeeklyAnalysis extends StatelessWidget {
     );
   }
 
-  List<Widget> _getBars() {
+  List<Widget> _getBars(context) {
     List<Widget> bars = [];
     for (double val in values) {
       bars.add(
@@ -58,7 +64,9 @@ class WeeklyAnalysis extends StatelessWidget {
             width: 10,
             height: 150,
             decoration: BoxDecoration(
-              color: Colors.lightBlue.shade50,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.grey.shade100
+                  : Colors.grey.shade700,
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),
