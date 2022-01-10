@@ -222,20 +222,26 @@ class Database {
   }
 
   int _calculateAvgCompletionRate(List<Map<dynamic, dynamic>> data) {
+    List<String> dates = _getDates(30);
     double avg = 0.0;
-    for (Map<dynamic, dynamic> goal in data) {
-      double avgGoal = 0.0;
-      for (Map<dynamic, dynamic> history in goal['history']) {
-        avgGoal += history['achieved'] / history['goal'];
+    for (String date in dates) {
+      for (Map<dynamic, dynamic> goal in data) {
+        double avgGoal = 0.0;
+        for (int i = 0; i < min(30, goal['history'].length); i++) {
+          var history = goal['history'].elementAt(i);
+          if (history['date'] == date) {
+            avgGoal += history['achieved'] / history['goal'];
+          }
+        }
+        avg += (avgGoal / min(30, goal['history'].length));
       }
-      avg += (avgGoal / goal['history'].length);
     }
     return (avg / data.length * 100).round();
   }
 
   List<double> _getWeeklyData(List<Map<dynamic, dynamic>> data) {
     List<double> weeklyData = List.generate(7, (index) => 0.0);
-    List<String> dates = _getDates();
+    List<String> dates = _getDates(7);
     for (int j = 0; j < dates.length; j++) {
       String date = dates.elementAt(j);
       for (Map<dynamic, dynamic> goal in data) {
@@ -254,11 +260,11 @@ class Database {
     return weeklyData;
   }
 
-  List<String> _getDates() {
+  List<String> _getDates(int n) {
     List<String> dates = [];
     DateTime today = DateTime.now();
     DateFormat dateFormat = DateFormat('yyyy-MM-dd');
-    for (int i = 6; i >= 0; i--) {
+    for (int i = n - 1; i >= 0; i--) {
       DateTime newDate = today.subtract(Duration(days: i));
       dates.add(dateFormat.format(newDate));
     }
