@@ -13,7 +13,7 @@ class AnalyticsScreen extends StatelessWidget {
         title: const Text('Analytics'),
         centerTitle: true,
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
+      body: FutureBuilder<Map<String, dynamic>?>(
         future: Provider.of<Database>(context).getAnalytics(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -56,7 +56,27 @@ class AnalyticsScreen extends StatelessWidget {
               ],
             );
           } else {
-            return Container();
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.auto_graph_outlined,
+                    size: 150,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Text(
+                    'No Data yet',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontSize: 24.0),
+                  ),
+                ],
+              ),
+            );
           }
         },
       ),

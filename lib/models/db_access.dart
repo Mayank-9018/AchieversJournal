@@ -210,12 +210,19 @@ class Database {
   /// Get analytics data
   /// avg_completion_rate -> `[int]` Average Goals Completion Rate
   /// weekly_data -> `[List<double>]` Percentage of Goals completely in the last 7 days
-  Future<Map<String, dynamic>> getAnalytics() async {
+  Future<Map<String, dynamic>?> getAnalytics() async {
     Map<String, dynamic> returnData = {};
-    List<Map<dynamic, dynamic>> data =
-        ((await _firebaseInstance!.ref('/$userUID/goals/').get()).value
-                as List<dynamic>)
-            .cast<Map<dynamic, dynamic>>();
+    List<Map<dynamic, dynamic>> data;
+    if (usingGoogleSignIn) {
+      data = (((await _firebaseInstance!.ref('/$userUID/goals/').get()).value ??
+              []) as List<dynamic>)
+          .cast<Map<dynamic, dynamic>>();
+    } else {
+      data = (await readFile())['goals'].cast<Map<dynamic, dynamic>>();
+    }
+    if (data.isEmpty) {
+      return null;
+    }
     returnData['avg_completion_rate'] = _calculateAvgCompletionRate(data);
     returnData['weekly_data'] = _getWeeklyData(data);
     return returnData;
@@ -226,6 +233,15 @@ class Database {
     double avg = 0.0;
     for (String date in dates) {
       for (Map<dynamic, dynamic> goal in data) {
+        if (goal['history'] == null || goal['history'].isEmpty) {
+          goal['history'] = [
+            {
+              "achieved": 0,
+              "date": DateFormat('yyyy-MM-dd').format(DateTime.now()),
+              "goal": goal["currentGoal"],
+            }
+          ];
+        }
         double avgGoal = 0.0;
         for (int i = 0; i < min(30, goal['history'].length); i++) {
           var history = goal['history'].elementAt(i);
