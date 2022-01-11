@@ -28,6 +28,7 @@ class AnalyticsScreen extends StatelessWidget {
                   height: 30,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     StatCard(
                       Column(
@@ -37,7 +38,7 @@ class AnalyticsScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           const SizedBox(
-                            height: 15,
+                            height: 10,
                           ),
                           Text(
                             snapshot.data!['avg_completion_rate'].toString() +
@@ -48,6 +49,44 @@ class AnalyticsScreen extends StatelessWidget {
                             height: 10,
                           ),
                           const Text('last 30 days'),
+                        ],
+                      ),
+                    ),
+                    StatCard(
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 7.5,
+                          ),
+                          Text('Trend',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(fontSize: 25)),
+                          const SizedBox(
+                            height: 12.5,
+                          ),
+                          Text(
+                            (snapshot.data!['trend'] > 0
+                                    ? "+"
+                                    : snapshot.data!['trend'] < 0
+                                        ? "-"
+                                        : "") +
+                                snapshot.data!['trend'].toString() +
+                                "%",
+                            style:
+                                Theme.of(context).textTheme.headline2!.copyWith(
+                                      color: snapshot.data!['trend'] > 0
+                                          ? Colors.green
+                                          : snapshot.data!['trend'] < 0
+                                              ? Colors.red
+                                              : Colors.grey,
+                                    ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          const Text('over last week'),
                         ],
                       ),
                     ),

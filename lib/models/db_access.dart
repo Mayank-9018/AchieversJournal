@@ -210,6 +210,7 @@ class Database {
   /// Get analytics data
   /// avg_completion_rate -> `[int]` Average Goals Completion Rate
   /// weekly_data -> `[List<double>]` Percentage of Goals completely in the last 7 days
+  /// trend -> `[int]` Percentage change over last week in goal completion
   Future<Map<String, dynamic>?> getAnalytics() async {
     Map<String, dynamic> returnData = {};
     List<Map<dynamic, dynamic>> data;
@@ -225,6 +226,7 @@ class Database {
     }
     returnData['avg_completion_rate'] = _calculateAvgCompletionRate(data);
     returnData['weekly_data'] = _getWeeklyData(data);
+    returnData['trend'] = _getTrend(data);
     return returnData;
   }
 
@@ -255,15 +257,15 @@ class Database {
     return (avg / data.length * 100).round();
   }
 
-  List<double> _getWeeklyData(List<Map<dynamic, dynamic>> data) {
-    List<double> weeklyData = List.generate(7, (index) => 0.0);
-    List<String> dates = _getDates(7);
+  List<double> _getWeeklyData(List<Map<dynamic, dynamic>> data, {weeks = 1}) {
+    List<double> weeklyData = List.generate(weeks * 7, (index) => 0.0);
+    List<String> dates = _getDates(weeks * 7);
     for (int j = 0; j < dates.length; j++) {
       String date = dates.elementAt(j);
       for (Map<dynamic, dynamic> goal in data) {
         List<Map<dynamic, dynamic>> history =
             goal['history'].cast<Map<dynamic, dynamic>>();
-        for (int i = 0; i < min(history.length, 7); i++) {
+        for (int i = 0; i < min(history.length, weeks * 7); i++) {
           if (history.elementAt(i)['date'] == date) {
             weeklyData[j] +=
                 history.elementAt(i)['achieved'] / history.elementAt(i)['goal'];
@@ -274,6 +276,25 @@ class Database {
       weeklyData[j] = double.parse(weeklyData[j].toStringAsFixed(2));
     }
     return weeklyData;
+  }
+
+  int? _getTrend(List<Map<dynamic, dynamic>> data) {
+    List<double> weeklyData = _getWeeklyData(data, weeks: 2);
+    List<double> lastWeek = weeklyData.sublist(0, 7);
+    List<double> currentWeek = weeklyData.sublist(7, 14);
+    double lastWeekAvg = 0.0;
+    double currentWeekAvg = 0.0;
+    for (double num in lastWeek) {
+      lastWeekAvg += num;
+    }
+    for (double num in currentWeek) {
+      currentWeekAvg += num;
+    }
+    lastWeekAvg /= 7;
+    currentWeekAvg /= 7;
+    double trend = (currentWeekAvg - lastWeekAvg) * 100;
+
+    return trend.round();
   }
 
   List<String> _getDates(int n) {
