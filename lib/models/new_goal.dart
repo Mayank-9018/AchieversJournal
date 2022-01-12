@@ -7,7 +7,7 @@ class NewGoal {
   String? unit;
   int currentGoal = 0;
 
-  NewGoal() : id = DateTime.now().millisecondsSinceEpoch;
+  NewGoal() : id = DateTime.now().hashCode;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
