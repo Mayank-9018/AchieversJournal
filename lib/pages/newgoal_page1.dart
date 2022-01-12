@@ -49,24 +49,27 @@ class _NewGoalPage1State extends State<NewGoalPage1> {
             const SizedBox(
               width: 10,
             ),
-            InkWell(
-              borderRadius: BorderRadius.circular(14.0),
-              onTap: () => _pickIcon(context),
-              child: Container(
-                padding: const EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(14.0),
-                ),
-                child: Icon(
-                  newGoal.iconData == null
-                      ? Icons.do_not_disturb
-                      : IconData(
-                          newGoal.iconData!,
-                          fontFamily: 'MaterialIcons',
-                        ),
-                  size: 28.0,
-                  color: newGoal.iconData == null ? Colors.grey : null,
+            Tooltip(
+              message: 'Add Icon',
+              child: InkWell(
+                borderRadius: BorderRadius.circular(14.0),
+                onTap: () => _pickIcon(context),
+                child: Container(
+                  padding: const EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(14.0),
+                  ),
+                  child: Icon(
+                    newGoal.iconData == null
+                        ? Icons.do_not_disturb
+                        : IconData(
+                            newGoal.iconData!,
+                            fontFamily: 'MaterialIcons',
+                          ),
+                    size: 28.0,
+                    color: newGoal.iconData == null ? Colors.grey : null,
+                  ),
                 ),
               ),
             )
