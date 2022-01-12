@@ -1,4 +1,8 @@
+import 'package:achievers_journal/models/db_access.dart';
+import 'package:achievers_journal/models/user.dart';
+import 'package:achievers_journal/screens/onboarding.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -42,6 +46,24 @@ class SettingsScreen extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
                   onTap: () {},
                 ),
+                ListTile(
+                  title: const Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  onTap: () {
+                    Provider.of<User>(context, listen: false).logout();
+                    Provider.of<Database>(context, listen: false)
+                      ..updateCompletedOnboardingStatus(false)
+                      ..updateSignInStatus(false);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const OnboardingScreen(),
+                        ),
+                        (route) => false);
+                  },
+                )
               ],
             ),
           ),

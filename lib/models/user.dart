@@ -22,5 +22,9 @@ class User {
     return _auth.currentUser != null;
   }
 
+  void logout() {
+    _auth.signOut();
+  }
+
   String get userId => _auth.currentUser!.uid;
 }
