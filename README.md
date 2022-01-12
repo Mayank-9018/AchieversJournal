@@ -4,6 +4,8 @@
 
 A **Goals tracker** app made with Flutter 💙.
 
+[<img src="download-button.png" width="120">](https://github.com/Mayank-9018/AchieversJournal/releases/latest)
+
 ## Features:
 
 - Support for both offline and online mode.
