@@ -153,7 +153,7 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
                   ),
                 );
               },
-              icon: const Icon(Icons.delete_outline), //TODO: Cancel notifications after goal delete
+              icon: const Icon(Icons.delete_outline),
             ),
           ],
         ),

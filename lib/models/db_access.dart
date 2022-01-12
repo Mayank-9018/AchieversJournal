@@ -156,18 +156,22 @@ class Database {
   /// Takes an integer `position` and removes the goal at that position
   /// from the goals list.
   void deleteGoal(int position) async {
+    int goalId;
     if (usingGoogleSignIn) {
       List<dynamic> goalsList =
           ((await _firebaseInstance!.ref('/$userUID/goals/').get()).value)
               as List<dynamic>;
       goalsList = goalsList.toList();
+      goalId = goalsList.elementAt(position)['id'];
       goalsList.removeAt(position);
       _firebaseInstance!.ref('/$userUID/goals/').set(goalsList);
     } else {
       Map<String, dynamic> data = await readFile();
+      goalId = data['goals'].elementAt(position)['id'];
       data['goals'].removeAt(position);
       writeToFile(jsonEncode(data));
     }
+    cancelNotification(goalId);
   }
 
   /// Takes `position` and `newValue` and updates the reminder time.
