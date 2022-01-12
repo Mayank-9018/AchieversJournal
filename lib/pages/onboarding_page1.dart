@@ -9,7 +9,7 @@ class OnboardingPage1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          const EdgeInsets.only(top: 60.0, left: 40.0, right: 40.0, bottom: 30),
+          const EdgeInsets.only(top: 40.0, left: 40.0, right: 40.0, bottom: 30),
       child: Column(
         children: [
           Expanded(
