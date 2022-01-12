@@ -34,7 +34,7 @@ class AnalyticsScreen extends StatelessWidget {
                       Column(
                         children: [
                           Text(
-                            'Average Goals Completion Rate',
+                            'Average Goals\nCompletion Rate',
                             style: Theme.of(context).textTheme.headline6,
                           ),
                           const SizedBox(
@@ -130,9 +130,10 @@ class StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double size = MediaQuery.of(context).size.width / 2 - 25;
     return Container(
-      height: 175,
-      width: 175,
+      height: size > 175 ? 175 : size,
+      width: size > 175 ? 175 : size,
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25.0),
@@ -147,7 +148,11 @@ class StatCard extends StatelessWidget {
           ),
         ],
       ),
-      child: child,
+      child: FittedBox(
+        alignment: Alignment.topCenter,
+        child: child,
+        fit: BoxFit.scaleDown,
+      ),
     );
   }
 }
