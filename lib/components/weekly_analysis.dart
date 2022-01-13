@@ -2,42 +2,47 @@ import 'package:flutter/material.dart';
 
 class WeeklyAnalysis extends StatelessWidget {
   final List<double> values;
+  final bool isLandscape;
 
-  const WeeklyAnalysis(this.values, {Key? key}) : super(key: key);
+  const WeeklyAnalysis(this.values, {this.isLandscape = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 230,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25.0),
-        color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.grey.shade300
-                : Colors.grey.shade800,
-            blurRadius: 15.0,
-            spreadRadius: 2.0,
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: 20.0,
-            top: 20.0,
-            child: Text(
-              'Weekly Analysis',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline6!
-                  .copyWith(fontSize: 22.0),
+    return Padding(
+      padding: EdgeInsets.only(
+          left: isLandscape ? 20 : 0, top: 20, bottom: isLandscape ? 20 : 0),
+      child: Container(
+        width: isLandscape
+            ? MediaQuery.of(context).size.width * 0.75
+            : MediaQuery.of(context).size.width - 20,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Theme.of(context).cardColor,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.grey.shade300
+                  : Colors.grey.shade800,
+              blurRadius: 15.0,
+              spreadRadius: 2.0,
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 30),
+              child: Text(
+                'Weekly Analysis',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontSize: 22.0),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(
                 left: 40.0,
                 right: 40.0,
@@ -49,8 +54,8 @@ class WeeklyAnalysis extends StatelessWidget {
                 children: _getBars(context),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

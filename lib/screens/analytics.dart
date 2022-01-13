@@ -8,6 +8,8 @@ class AnalyticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Analytics'),
@@ -17,83 +19,24 @@ class AnalyticsScreen extends StatelessWidget {
         future: Provider.of<Database>(context).getAnalytics(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView(
-              padding: const EdgeInsets.symmetric(
-                vertical: 15.0,
-                horizontal: 20.0,
-              ),
-              children: [
+            if (isLandscape) {
+              return Row(
+                children: [
+                  WeeklyAnalysis(
+                    snapshot.data!['weekly_data'],
+                    isLandscape: true,
+                  ),
+                  Expanded(
+                    child: getChildren(snapshot, isLandscape, context),
+                  ),
+                ],
+              );
+            } else {
+              return Column(children: [
                 WeeklyAnalysis(snapshot.data!['weekly_data']),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    StatCard(
-                      Column(
-                        children: [
-                          Text(
-                            'Average Goals\nCompletion Rate',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            snapshot.data!['avg_completion_rate'].toString() +
-                                "%",
-                            style: Theme.of(context).textTheme.headline2,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text('last 30 days'),
-                        ],
-                      ),
-                    ),
-                    StatCard(
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 7.5,
-                          ),
-                          Text('Trend',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(fontSize: 25)),
-                          const SizedBox(
-                            height: 12.5,
-                          ),
-                          Text(
-                            (snapshot.data!['trend'] > 0
-                                    ? "+"
-                                    : snapshot.data!['trend'] < 0
-                                        ? "-"
-                                        : "") +
-                                snapshot.data!['trend'].toString() +
-                                "%",
-                            style:
-                                Theme.of(context).textTheme.headline2!.copyWith(
-                                      color: snapshot.data!['trend'] > 0
-                                          ? Colors.green
-                                          : snapshot.data!['trend'] < 0
-                                              ? Colors.red
-                                              : Colors.grey,
-                                    ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          const Text('over last week'),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            );
+                Expanded(child: getChildren(snapshot, isLandscape, context))
+              ]);
+            }
           } else {
             return Center(
               child: Column(
@@ -119,6 +62,77 @@ class AnalyticsScreen extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+
+  Widget getChildren(snapshot, isLandscape, context) {
+    return GridView(
+      padding: const EdgeInsets.all(15.0),
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 250,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 15,
+      ),
+      children: [
+        StatCard(
+          Column(
+            children: [
+              Text(
+                'Average Goals\nCompletion Rate',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                snapshot.data!['avg_completion_rate'].toString() + "%",
+                style: Theme.of(context).textTheme.headline2,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text('last 30 days'),
+            ],
+          ),
+        ),
+        StatCard(
+          Column(
+            children: [
+              const SizedBox(
+                height: 7.5,
+              ),
+              Text('Trend',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontSize: 25)),
+              const SizedBox(
+                height: 12.5,
+              ),
+              Text(
+                (snapshot.data!['trend'] > 0
+                        ? "+"
+                        : snapshot.data!['trend'] < 0
+                            ? "-"
+                            : "") +
+                    snapshot.data!['trend'].toString() +
+                    "%",
+                style: Theme.of(context).textTheme.headline2!.copyWith(
+                      color: snapshot.data!['trend'] > 0
+                          ? Colors.green
+                          : snapshot.data!['trend'] < 0
+                              ? Colors.red
+                              : Colors.grey,
+                    ),
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Text('over last week'),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
