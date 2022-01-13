@@ -8,8 +8,9 @@ import 'package:provider/provider.dart';
 
 class GoalCard extends StatefulWidget {
   final Goal goal;
+  final bool isLandscape;
 
-  const GoalCard(this.goal, {Key? key}) : super(key: key);
+  const GoalCard(this.goal, this.isLandscape, {Key? key}) : super(key: key);
 
   @override
   State<GoalCard> createState() => _GoalCardState();
@@ -50,104 +51,112 @@ class _GoalCardState extends State<GoalCard>
     Goal goal = widget.goal;
     percentage = goal.history.first['achieved'] / goal.history.first['goal'];
     runAnimation();
-    return Container(
-      padding: const EdgeInsets.all(20.0),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).brightness == Brightness.light
-              ? Colors.black
-              : Colors.white,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Container(
+        width: widget.isLandscape
+            ? MediaQuery.of(context).size.width / 2 - 20
+            : MediaQuery.of(context).size.width - 20,
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.light
+                ? Colors.black
+                : Colors.white,
+          ),
+          borderRadius: BorderRadius.circular(15.0),
         ),
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width / 2 - 50),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  goal.name,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                const SizedBox(height: 20),
-                Text(goal.description ?? ''),
-                const SizedBox(height: 5),
-                Text(
-                    "${goal.history.first['achieved'].toString()} of ${goal.history.first['goal'].toString()} ${goal.isTimeBased ? 'minutes' : goal.unit}"),
-                const SizedBox(height: 10),
-                Center(
-                  child: OutlinedButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                        const EdgeInsets.symmetric(horizontal: 35),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: constraints.maxWidth / 2,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        goal.name,
+                        style: Theme.of(context).textTheme.headline6,
                       ),
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => UpdateDialog(
-                          goal.history.first as Map<dynamic, dynamic>,
-                          (newVal) {
-                            if (goal.hasToday) {
-                              Provider.of<Database>(context, listen: false)
-                                  .updateAchieved(goal.position!, newVal);
-                            } else {
-                              goal.history.first['achieved'] = newVal;
-                              Provider.of<Database>(context, listen: false)
-                                  .updateHistory(
-                                goal.position!,
-                                goal.history,
-                              );
-                            }
+                      const SizedBox(height: 20),
+                      Text(goal.description ?? ''),
+                      const SizedBox(height: 5),
+                      Text(
+                          "${goal.history.first['achieved'].toString()} of ${goal.history.first['goal'].toString()} ${goal.isTimeBased ? 'minutes' : goal.unit}"),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: OutlinedButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(horizontal: 35),
+                            ),
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => UpdateDialog(
+                                goal.history.first as Map<dynamic, dynamic>,
+                                (newVal) {
+                                  if (goal.hasToday) {
+                                    Provider.of<Database>(context,
+                                            listen: false)
+                                        .updateAchieved(goal.position!, newVal);
+                                  } else {
+                                    goal.history.first['achieved'] = newVal;
+                                    Provider.of<Database>(context,
+                                            listen: false)
+                                        .updateHistory(
+                                      goal.position!,
+                                      goal.history,
+                                    );
+                                  }
+                                },
+                              ),
+                            );
                           },
+                          child: const Text('Update'),
                         ),
-                      );
-                    },
-                    child: const Text('Update'),
+                      ),
+                    ],
+                  ),
+                ),
+                AnimatedBuilder(
+                  child: Text(
+                    (percentage * 100).round().toString() + '%',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  animation: animation,
+                  builder: (context, child) => Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                          height: constraints.maxWidth / 2,
+                          width: constraints.maxWidth / 2,
+                          child: CustomPaint(
+                            painter: CustomCPI(
+                                animation.value,
+                                Theme.of(context).brightness == Brightness.light
+                                    ? Colors.black
+                                    : Colors.grey.shade700,
+                                percentage >= 0.7
+                                    ? Colors.green
+                                    : percentage > 0.3
+                                        ? Colors.amber
+                                        : Colors.red),
+                          )),
+                      child!,
+                    ],
                   ),
                 ),
               ],
-            ),
-          ),
-          ConstrainedBox(
-            constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width / 2 - 35),
-            child: LayoutBuilder(
-              builder: (context, constraints) => AnimatedBuilder(
-                child: Text(
-                  (percentage * 100).round().toString() + '%',
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                animation: animation,
-                builder: (context, child) => Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                        height: constraints.maxWidth,
-                        width: constraints.maxWidth,
-                        child: CustomPaint(
-                          painter: CustomCPI(
-                              animation.value,
-                              Theme.of(context).brightness == Brightness.light
-                                  ? Colors.black
-                                  : Colors.grey.shade700,
-                              percentage >= 0.7
-                                  ? Colors.green
-                                  : percentage > 0.3
-                                      ? Colors.amber
-                                      : Colors.red),
-                        )),
-                    child!,
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }

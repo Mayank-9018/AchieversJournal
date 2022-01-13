@@ -81,75 +81,78 @@ class _ProgressBarState extends State<ProgressBar>
           }
           _animationController.reverse();
         },
-        child: Stack(
-          children: [
-            Container(
-              height: 70,
-              decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.light
-                    ? Colors.white
-                    : Colors.grey.shade700,
-                border: Border.all(width: 1.5),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-            ),
-            LayoutBuilder(
-              builder: (context, constraints) => Padding(
-                padding: const EdgeInsets.only(top: 1.5, left: 1.5, right: 1.5),
-                child: Container(
-                  height: 70 - 3.0,
-                  width: (constraints.maxWidth *
-                      (widget.progress / widget.maxGoal)),
-                  decoration: BoxDecoration(
-                    color: (widget.progress / widget.maxGoal) >= 0.7
-                        ? Colors.green
-                        : (widget.progress / widget.maxGoal) > 0.3
-                            ? Colors.amber
-                            : Colors.red,
-                    borderRadius: BorderRadius.circular(14.0),
-                  ),
+        child: LayoutBuilder(
+          builder: (context, constraints) => Stack(
+            children: [
+              Container(
+                height: 70,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.white
+                      : Colors.grey.shade700,
+                  border: Border.all(width: 1.5),
+                  borderRadius: BorderRadius.circular(15.0),
                 ),
               ),
-            ),
-            Positioned(
-              top: widget.isHistory ? 25 : 16.5,
-              left: widget.isHistory
-                  ? (MediaQuery.of(context).size.width - 150) *
-                          (widget.progress / widget.maxGoal) -
-                      ((widget.progress / widget.maxGoal) < 0.5 ? 20 : 0) +
-                      ((widget.progress / widget.maxGoal) == 0.0 ? 40 : 0)
-                  : 10,
-              child: widget.isHistory
-                  ? Text(
-                      (((widget.progress / widget.maxGoal)) * 100)
-                          .round()
-                          .toString(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(fontSize: 16.0),
-                    )
-                  : Row(
-                      children: [
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Icon(
-                          widget.icon,
-                          color: Colors.black,
-                          size: 35,
-                        ),
-                        const SizedBox(
-                          width: 15,
-                        ),
-                        Text(
-                          widget.goalName!,
-                          style: Theme.of(context).textTheme.bodyText1,
-                        )
-                      ],
+              Padding(
+                padding: const EdgeInsets.only(top: 1.5, left: 1.5, right: 1.5),
+                child: Container(
+                    height: 70 - 3.0,
+                    width: (constraints.maxWidth *
+                        (widget.progress / widget.maxGoal)),
+                    decoration: BoxDecoration(
+                      color: (widget.progress / widget.maxGoal) >= 0.7
+                          ? Colors.green
+                          : (widget.progress / widget.maxGoal) > 0.3
+                              ? Colors.amber
+                              : Colors.red,
+                      borderRadius: BorderRadius.circular(14.0),
                     ),
-            )
-          ],
+                    child: widget.isHistory
+                        ? Align(
+                            alignment: Alignment.centerRight,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                (((widget.progress / widget.maxGoal)) * 100)
+                                    .round()
+                                    .toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(fontSize: 16.0),
+                              ),
+                            ),
+                          )
+                        : null),
+              ),
+              !widget.isHistory
+                  ? Positioned(
+                      top: widget.isHistory ? 25 : 16.5,
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Icon(
+                            widget.icon,
+                            color: Colors.black,
+                            size: 35,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          Text(
+                            widget.goalName!,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          )
+                        ],
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
         ),
       ),
     );

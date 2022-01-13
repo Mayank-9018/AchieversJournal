@@ -89,6 +89,37 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
   }
 
   Widget insideContent(bool hasData) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    late List<Widget> components = [
+      GoalCard(_goal, isLandscape),
+      Expanded(
+        child: Column(
+          children: [
+            Center(
+              child: Text(
+                'History',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5!
+                    .copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+            Expanded(
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(15.0),
+                itemCount: _goal.history.isEmpty ? 0 : _goal.history.length - 1,
+                itemBuilder: (context, index) => getHistoryBar(index + 1),
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 10,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
     return Scaffold(
         appBar: AppBar(
           actions: [
@@ -164,39 +195,9 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
                   left: 10,
                   right: 10,
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: GoalCard(_goal),
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: Text(
-                        'History',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline5!
-                            .copyWith(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Expanded(
-                      child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.all(15.0),
-                        itemCount: _goal.history.isEmpty
-                            ? 0
-                            : _goal.history.length - 1,
-                        itemBuilder: (context, index) =>
-                            getHistoryBar(index + 1),
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 10,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: isLandscape
+                    ? Row(children: components)
+                    : Column(children: components),
               )
             : null);
   }
