@@ -47,6 +47,7 @@ class OnboardingScreen extends StatelessWidget {
                             .signInWithGoogle()
                             .then(
                           (value) {
+                            if (value == null) return;
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                   builder: (context) => const DashboardScreen(),
