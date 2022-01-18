@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:achievers_journal/components/date_circle.dart';
 import 'package:achievers_journal/components/goal_card.dart';
+import 'package:achievers_journal/screens/goal_edit_dialog.dart';
 import 'package:achievers_journal/components/progress_bar.dart';
 import 'package:achievers_journal/models/db_access.dart';
 import 'package:achievers_journal/models/goal.dart';
@@ -123,6 +124,14 @@ class _GoalDetailScreenState extends State<GoalDetailScreen>
     return Scaffold(
         appBar: AppBar(
           actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => GoalEditDialog(_goal),
+                    fullscreenDialog: true));
+              },
+              icon: const Icon(Icons.edit),
+            ),
             IconButton(
               onPressed: _showTimePickerDialog,
               icon: const Icon(Icons.alarm),

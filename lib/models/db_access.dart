@@ -187,6 +187,24 @@ class Database {
     }
   }
 
+  /// Takes a `Map<String,dynamic>` with _key_ being the value to change
+  /// and the _value_ to the respective key being the new value
+  void updateGoal(int position, Map<String, dynamic> changes) async {
+    if (usingGoogleSignIn) {
+      for (var change in changes.entries) {
+        _firebaseInstance!
+            .ref('/$userUID/goals/$position/${change.key}/')
+            .set(change.value);
+      }
+    } else {
+      Map<String, dynamic> data = await readFile();
+      for (var change in changes.entries) {
+        data['goals'].elementAt(position)[change.key] = change.value;
+      }
+      writeToFile(jsonEncode(data));
+    }
+  }
+
   /// Takes `hour` in **24 hours**, `minutes`,`notificationId`,
   /// `notificationTitle`,`notificationBody` and schedules daily repeating
   /// notifications.
