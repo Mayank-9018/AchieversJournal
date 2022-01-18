@@ -25,9 +25,11 @@ class User {
     return _auth.currentUser != null;
   }
 
-  void logout() {
-    gsi.disconnect();
-    _auth.signOut();
+  void logout() async {
+    if (await gsi.isSignedIn() && _auth.currentUser != null) {
+      gsi.disconnect();
+      _auth.signOut();
+    }
   }
 
   String get userId => _auth.currentUser!.uid;
