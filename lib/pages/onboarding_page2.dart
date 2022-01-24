@@ -1,7 +1,8 @@
-import 'package:achievers_journal/components/page_indicator.dart';
-import 'package:achievers_journal/components/weekly_analysis.dart';
-import 'package:achievers_journal/screens/analytics.dart';
 import 'package:flutter/material.dart';
+
+import '../components/page_indicator.dart';
+import '../components/weekly_analysis.dart';
+import '../screens/analytics.dart';
 
 class OnboardingPage2 extends StatelessWidget {
   const OnboardingPage2({Key? key}) : super(key: key);

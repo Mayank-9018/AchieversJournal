@@ -28,7 +28,7 @@ class _NewGoalPage2State extends State<NewGoalPage2> {
         padding: const EdgeInsets.only(top: 50),
         children: [
           Text(
-            "How often?",
+            'How often?',
             style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(

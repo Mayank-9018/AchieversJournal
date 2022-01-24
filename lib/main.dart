@@ -1,13 +1,14 @@
-import 'package:achievers_journal/models/user.dart';
-import 'package:achievers_journal/screens/dashboard.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'firebase_options.dart';
-import 'package:achievers_journal/screens/onboarding.dart';
-import 'package:achievers_journal/themes/dark_theme.dart';
-import 'package:achievers_journal/themes/light_theme.dart';
 import 'models/db_access.dart';
+import 'models/user.dart';
+import 'screens/dashboard.dart';
+import 'screens/onboarding.dart';
+import 'themes/dark_theme.dart';
+import 'themes/light_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

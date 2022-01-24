@@ -1,11 +1,12 @@
-import 'package:achievers_journal/models/db_access.dart';
-import 'package:achievers_journal/models/new_goal.dart';
-import 'package:achievers_journal/pages/newgoal_page1.dart';
-import 'package:achievers_journal/pages/newgoal_page2.dart';
-import 'package:achievers_journal/pages/newgoal_page3.dart';
-import 'package:achievers_journal/pages/newgoal_page4.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../models/db_access.dart';
+import '../models/new_goal.dart';
+import '../pages/newgoal_page1.dart';
+import '../pages/newgoal_page2.dart';
+import '../pages/newgoal_page3.dart';
+import '../pages/newgoal_page4.dart';
 
 class NewGoalScreen extends StatefulWidget {
   const NewGoalScreen({Key? key}) : super(key: key);

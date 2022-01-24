@@ -11,13 +11,13 @@ class NewGoal {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      "name": title,
-      "description": description,
-      "icon": iconData,
-      "currentGoal": currentGoal,
-      "id": id,
-      "isTimeBased": isTimeBased,
-      "unit": unit,
+      'name': title,
+      'description': description,
+      'icon': iconData,
+      'currentGoal': currentGoal,
+      'id': id,
+      'isTimeBased': isTimeBased,
+      'unit': unit,
     };
   }
 }

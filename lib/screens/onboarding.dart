@@ -1,11 +1,12 @@
-import 'package:achievers_journal/models/db_access.dart';
-import 'package:achievers_journal/models/user.dart';
-import 'package:achievers_journal/screens/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '/pages/onboarding_page1.dart';
 import '/pages/onboarding_page2.dart';
 import '/pages/onboarding_page3.dart';
+import '../models/db_access.dart';
+import '../models/user.dart';
+import 'dashboard.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
