@@ -1,7 +1,8 @@
-import 'package:achievers_journal/models/new_goal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:provider/provider.dart';
+
+import '../models/new_goal.dart';
 
 class NewGoalPage1 extends StatefulWidget {
   const NewGoalPage1({Key? key}) : super(key: key);

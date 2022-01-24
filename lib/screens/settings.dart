@@ -1,8 +1,9 @@
-import 'package:achievers_journal/models/db_access.dart';
-import 'package:achievers_journal/models/user.dart';
-import 'package:achievers_journal/screens/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../models/db_access.dart';
+import '../models/user.dart';
+import 'onboarding.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);

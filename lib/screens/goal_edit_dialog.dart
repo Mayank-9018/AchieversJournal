@@ -1,10 +1,11 @@
-import 'package:achievers_journal/models/db_access.dart';
-import 'package:achievers_journal/models/goal.dart';
-import 'package:achievers_journal/pages/newgoal_page2.dart' show Frequency;
-import 'package:achievers_journal/pages/newgoal_page3.dart' show Mode;
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:provider/provider.dart';
+
+import '../models/db_access.dart';
+import '../models/goal.dart';
+import '../pages/newgoal_page2.dart' show Frequency;
+import '../pages/newgoal_page3.dart' show Mode;
 
 class GoalEditDialog extends StatefulWidget {
   final Goal goal;
@@ -59,7 +60,7 @@ class _GoalEditDialogState extends State<GoalEditDialog> {
         padding: const EdgeInsets.only(top: 20, left: 20.0, right: 20.0),
         children: [
           Text(
-            "Title:",
+            'Title:',
             style: Theme.of(context).textTheme.headline6,
           ),
           spacing,
@@ -106,7 +107,7 @@ class _GoalEditDialogState extends State<GoalEditDialog> {
           ),
           spacing,
           Text(
-            "Description:",
+            'Description:',
             style: Theme.of(context).textTheme.headline6,
           ),
           spacing,
@@ -119,7 +120,7 @@ class _GoalEditDialogState extends State<GoalEditDialog> {
           ),
           spacing,
           Text(
-            "Frequency:",
+            'Frequency:',
             style: Theme.of(context).textTheme.headline6,
           ),
           spacing,

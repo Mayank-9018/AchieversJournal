@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:achievers_journal/models/notifications.dart';
+
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
+
+import 'notifications.dart';
 
 class Database {
   late bool usingGoogleSignIn;
@@ -66,7 +68,7 @@ class Database {
       _file.writeAsString(
         jsonEncode(
           <String, dynamic>{
-            "goals": [],
+            'goals': [],
           },
         ),
       );
@@ -260,9 +262,9 @@ class Database {
         if (goal['history'] == null || goal['history'].isEmpty) {
           goal['history'] = [
             {
-              "achieved": 0,
-              "date": DateFormat('yyyy-MM-dd').format(DateTime.now()),
-              "goal": goal["currentGoal"],
+              'achieved': 0,
+              'date': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+              'goal': goal['currentGoal'],
             }
           ];
         }

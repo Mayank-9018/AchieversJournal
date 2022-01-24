@@ -1,6 +1,7 @@
-import 'package:achievers_journal/models/goal.dart';
-import 'package:achievers_journal/screens/goal_detail.dart';
 import 'package:flutter/material.dart';
+
+import '../models/goal.dart';
+import '../screens/goal_detail.dart';
 
 class ProgressBar extends StatefulWidget {
   final IconData? icon;

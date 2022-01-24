@@ -1,5 +1,6 @@
-import 'package:achievers_journal/screens/dashboard.dart';
 import 'package:flutter/material.dart';
+
+import 'dashboard.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({Key? key}) : super(key: key);

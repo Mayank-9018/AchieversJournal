@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'package:achievers_journal/components/custom_cpi_painter.dart';
-import 'package:achievers_journal/components/update_dialog.dart';
-import 'package:achievers_journal/models/db_access.dart';
-import 'package:achievers_journal/models/goal.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../models/db_access.dart';
+import '../models/goal.dart';
+import 'custom_cpi_painter.dart';
+import 'update_dialog.dart';
 
 class GoalCard extends StatefulWidget {
   final Goal goal;

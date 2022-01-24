@@ -30,9 +30,9 @@ class Goal {
       history.insert(
         0,
         {
-          "achieved": 0,
-          "goal": currentGoal,
-          "date": DateFormat('yyyy-MM-dd').format(
+          'achieved': 0,
+          'goal': currentGoal,
+          'date': DateFormat('yyyy-MM-dd').format(
             DateTime.now(),
           )
         },

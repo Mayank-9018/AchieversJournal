@@ -1,6 +1,7 @@
-import 'package:achievers_journal/models/new_goal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../models/new_goal.dart';
 
 class NewGoalPage4 extends StatelessWidget {
   final PageController _pageController;

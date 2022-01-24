@@ -1,7 +1,8 @@
-import 'package:achievers_journal/components/weekly_analysis.dart';
-import 'package:achievers_journal/models/db_access.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../components/weekly_analysis.dart';
+import '../models/db_access.dart';
 
 class AnalyticsScreen extends StatelessWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
@@ -85,7 +86,7 @@ class AnalyticsScreen extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                snapshot.data!['avg_completion_rate'].toString() + "%",
+                snapshot.data!['avg_completion_rate'].toString() + '%',
                 style: Theme.of(context).textTheme.headline2,
               ),
               const SizedBox(
@@ -111,12 +112,12 @@ class AnalyticsScreen extends StatelessWidget {
               ),
               Text(
                 (snapshot.data!['trend'] > 0
-                        ? "+"
+                        ? '+'
                         : snapshot.data!['trend'] < 0
-                            ? "-"
-                            : "") +
+                            ? '-'
+                            : '') +
                     snapshot.data!['trend'].toString() +
-                    "%",
+                    '%',
                 style: Theme.of(context).textTheme.headline2!.copyWith(
                       color: snapshot.data!['trend'] > 0
                           ? Colors.green

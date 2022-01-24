@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:achievers_journal/components/date_circle.dart';
-import 'package:achievers_journal/components/goal_card.dart';
-import 'package:achievers_journal/screens/goal_edit_dialog.dart';
-import 'package:achievers_journal/components/progress_bar.dart';
-import 'package:achievers_journal/models/db_access.dart';
-import 'package:achievers_journal/models/goal.dart';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../components/date_circle.dart';
+import '../components/goal_card.dart';
+import '../components/progress_bar.dart';
+import '../models/db_access.dart';
+import '../models/goal.dart';
+import 'goal_edit_dialog.dart';
 
 class GoalDetailScreen extends StatefulWidget {
   final int position;
