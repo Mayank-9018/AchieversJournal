@@ -4,7 +4,8 @@
 
 A **Goals tracker** app made with Flutter 💙.
 
-[<img src="download-button.png" width="120">](https://github.com/Mayank-9018/AchieversJournal/releases/latest)
+
+[![download-btn](https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android)](https://github.com/Mayank-9018/AchieversJournal/releases/latest)
 
 ## Features:
 
